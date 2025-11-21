@@ -1,623 +1,2221 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Sharon Thriftwear | We’ll Be Right Back</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sharon Thriftwear | Kiambu Thrift Fashion</title>
+    <meta
+      name="description"
+      content="Sharon Thriftwear in Kiambu Town near Ola Energy – trendy thrifted crop tops, dresses, maxi dresses, short dresses, maxi skirts and mini skirts with countrywide delivery across Kenya."
+    />
 
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS via CDN (v4 browser build) -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --bg: #f6f2ec;
-      --bg-soft: #fdfaf5;
-      --accent: #d48a5a;
-      --accent-soft: rgba(212, 138, 90, 0.1);
-      --text-main: #2c2621;
-      --text-muted: #6d6259;
-      --border-soft: rgba(0, 0, 0, 0.06);
-      --focus: #7b9c86;
-      --shadow-soft: 0 18px 50px rgba(0, 0, 0, 0.08);
-      --radius-lg: 20px;
-      --radius-pill: 999px;
-      --transition-fast: 180ms ease-out;
-    }
-
-    body {
-      min-height: 100vh;
-      font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--text-main);
-      background: radial-gradient(circle at top left, #f0e4d9 0, var(--bg) 40%, #faf6f1 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-    }
-
-    .page-shell {
-      position: relative;
-      width: 100%;
-      max-width: 960px;
-      display: grid;
-      grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
-      gap: 40px;
-      align-items: center;
-    }
-
-    /* Soft abstract accent in the background */
-    .page-shell::before {
-      content: "";
-      position: absolute;
-      inset: -80px;
-      background:
-        radial-gradient(circle at 10% 20%, rgba(216, 136, 92, 0.07) 0, transparent 55%),
-        radial-gradient(circle at 80% 10%, rgba(123, 156, 134, 0.12) 0, transparent 60%);
-      opacity: 0.9;
-      z-index: -1;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 32px;
-    }
-
-    .brand-mark {
-      width: 42px;
-      height: 42px;
-      border-radius: 14px;
-      background: linear-gradient(145deg, #2f2924, #4b4038);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fdf6ec;
-      font-family: "Playfair Display", serif;
-      font-size: 24px;
-      letter-spacing: 0.08em;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
-    }
-
-    .brand-text {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .brand-name {
-      font-family: "Playfair Display", serif;
-      font-size: 1.35rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .brand-tagline {
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.22em;
-      color: var(--text-muted);
-    }
-
-    .card {
-      background: rgba(253, 250, 245, 0.92);
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--border-soft);
-      box-shadow: var(--shadow-soft);
-      padding: 28px 28px 26px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .card::before {
-      content: "";
-      position: absolute;
-      inset: -120px;
-      background: conic-gradient(
-        from 210deg,
-        rgba(212, 138, 90, 0.13),
-        transparent 40%,
-        rgba(123, 156, 134, 0.16),
-        transparent 75%,
-        rgba(212, 138, 90, 0.13)
-      );
-      opacity: 0.8;
-      mix-blend-mode: multiply;
-      pointer-events: none;
-    }
-
-    .card-inner {
-      position: relative;
-    }
-
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 5px 12px 5px 6px;
-      border-radius: var(--radius-pill);
-      background: var(--accent-soft);
-      color: var(--accent);
-      font-size: 0.74rem;
-      font-weight: 500;
-      letter-spacing: 0.11em;
-      text-transform: uppercase;
-      margin-bottom: 16px;
-    }
-
-    .status-dot {
-      width: 14px;
-      height: 14px;
-      border-radius: 999px;
-      background: radial-gradient(circle at 30% 30%, #ffffff, #ffb58d);
-      box-shadow: 0 0 0 2px rgba(212, 138, 90, 0.25), 0 0 16px rgba(212, 138, 90, 0.9);
-      animation: pulse 1.6s ease-out infinite;
-    }
-
-    @keyframes pulse {
-      0% {
-        transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(212, 138, 90, 0.7);
-      }
-      70% {
-        transform: scale(1.07);
-        box-shadow: 0 0 0 12px rgba(212, 138, 90, 0);
-      }
-      100% {
-        transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(212, 138, 90, 0);
-      }
-    }
-
-    h1 {
-      font-family: "Playfair Display", serif;
-      font-size: clamp(2rem, 2.6vw, 2.4rem);
-      line-height: 1.21;
-      margin-bottom: 10px;
-      letter-spacing: 0.01em;
-    }
-
-    .subtitle {
-      font-size: 0.92rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-      margin-bottom: 22px;
-    }
-
-    .meta-row {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 14px 18px;
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      margin-bottom: 20px;
-    }
-
-    .meta-label {
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      font-weight: 500;
-      font-size: 0.7rem;
-      color: #978b80;
-    }
-
-    .pill-soft {
-      padding: 4px 10px;
-      border-radius: var(--radius-pill);
-      background: #f1e7dd;
-      border: 1px solid rgba(0, 0, 0, 0.02);
-      color: #5b4f45;
-      font-size: 0.74rem;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-    }
-
-    .highlight {
-      font-weight: 500;
-      color: #4b4038;
-    }
-
-    .form {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-
-    .form input[type="email"] {
-      flex: 1 1 190px;
-      min-width: 0;
-      padding: 10px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(0, 0, 0, 0.08);
-      background: rgba(255, 255, 255, 0.92);
-      font-size: 0.86rem;
-      color: var(--text-main);
-      outline: none;
-      transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast), transform 110ms ease-out;
-    }
-
-    .form input::placeholder {
-      color: #b2a79f;
-    }
-
-    .form input:focus {
-      border-color: rgba(123, 156, 134, 0.7);
-      box-shadow: 0 0 0 1px rgba(123, 156, 134, 0.5), 0 0 0 8px rgba(123, 156, 134, 0.12);
-      background: #ffffff;
-      transform: translateY(-1px);
-    }
-
-    .btn {
-      flex: 0 0 auto;
-      padding: 10px 20px;
-      border-radius: 999px;
-      border: none;
-      cursor: pointer;
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      background: linear-gradient(135deg, #2f2924, #4b4038);
-      color: #fdf6ec;
-      box-shadow: 0 12px 26px rgba(53, 44, 39, 0.45);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      transition: transform 130ms ease-out, box-shadow 130ms ease-out, opacity 130ms ease-out;
-    }
-
-    .btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 15px 32px rgba(53, 44, 39, 0.55);
-      opacity: 0.96;
-    }
-
-    .btn:active {
-      transform: translateY(1px) scale(0.985);
-      box-shadow: 0 8px 18px rgba(53, 44, 39, 0.4);
-      opacity: 0.92;
-    }
-
-    .helper-text {
-      font-size: 0.76rem;
-      color: var(--text-muted);
-    }
-
-    .helper-text span {
-      color: var(--accent);
-      font-weight: 500;
-    }
-
-    /* Right column – visual teaser */
-    .visual {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .mannequin-card {
-      width: 100%;
-      max-width: 360px;
-      aspect-ratio: 4 / 5;
-      border-radius: 28px;
-      border: 1px solid rgba(0, 0, 0, 0.04);
-      background:
-        linear-gradient(160deg, #f7ecdf, #e1d9cf 40%, #efe3d6 100%);
-      box-shadow:
-        0 24px 55px rgba(42, 31, 23, 0.32),
-        0 0 0 1px rgba(255, 255, 255, 0.9) inset;
-      position: relative;
-      overflow: hidden;
-      padding: 22px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .tag-top {
-      font-size: 0.7rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: rgba(56, 46, 39, 0.8);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .tag-top span:nth-child(2) {
-      font-weight: 500;
-      font-size: 0.74rem;
-    }
-
-    .hanger {
-      position: absolute;
-      inset: 20% 20% auto 16%;
-      height: 54%;
-      border-radius: 999px;
-      background: radial-gradient(circle at 20% 0%, rgba(255, 255, 255, 0.75), rgba(222, 203, 181, 0.9));
-      box-shadow: 0 24px 40px rgba(105, 87, 70, 0.5);
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    .hanger-inner {
-      width: 100%;
-      height: 88%;
-      border-radius: 999px;
-      background:
-        linear-gradient(160deg, #7f927f, #4a6351 52%, #2d3a35 100%);
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      padding: 40px 26px 24px;
-      color: #f5f5f2;
-    }
-
-    .hanger-neck {
-      position: absolute;
-      top: -34px;
-      left: 50%;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      border: 5px solid #bfa689;
-      border-top-color: transparent;
-      border-left-color: transparent;
-      transform: translateX(-50%) rotate(35deg);
-      opacity: 0.9;
-    }
-
-    .hanger-bar {
-      position: absolute;
-      top: -10px;
-      left: 50%;
-      width: 60px;
-      height: 5px;
-      border-radius: 999px;
-      background: #c7b39a;
-      transform: translateX(-50%);
-      box-shadow: 0 4px 5px rgba(129, 104, 75, 0.45);
-    }
-
-    .hanger-label {
-      font-size: 0.75rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      margin-bottom: 6px;
-      opacity: 0.9;
-    }
-
-    .hanger-title {
-      font-family: "Playfair Display", serif;
-      font-size: 1.35rem;
-      line-height: 1.25;
-      margin-bottom: 10px;
-    }
-
-    .hanger-meta {
-      font-size: 0.78rem;
-      color: #dde5dd;
-    }
-
-    .hanger-meta span {
-      font-weight: 500;
-    }
-
-    .hanger-badge {
-      position: absolute;
-      right: 18px;
-      bottom: 22px;
-      padding: 7px 12px;
-      border-radius: 999px;
-      background: rgba(248, 241, 230, 0.95);
-      color: #3d3329;
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-    }
-
-    .foot-strip {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.75rem;
-      color: #4c4037;
-    }
-
-    .foot-strip span:last-child {
-      font-weight: 500;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-    }
-
-    .foot-strip span:last-child::before {
-      content: "• ";
-      margin-right: 4px;
-      font-weight: 400;
-    }
-
-    .badge-circle {
-      position: absolute;
-      bottom: -32px;
-      right: -18px;
-      width: 110px;
-      height: 110px;
-      border-radius: 50%;
-      border: 1px dashed rgba(82, 66, 51, 0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.65rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: rgba(57, 46, 36, 0.7);
-      backdrop-filter: blur(4px);
-    }
-
-    .badge-circle span {
-      transform: translateY(-8px);
-      text-align: center;
-      width: 70%;
-    }
-
-    /* Layout adjustments for smaller screens */
-    @media (max-width: 800px) {
-      .page-shell {
-        grid-template-columns: minmax(0, 1fr);
-        max-width: 480px;
+    <!-- Basic font & custom tweaks -->
+    <style>
+      html {
+        scroll-behavior: smooth;
       }
 
-      .visual {
-        order: -1;
+      /* Preloader animation */
+      @keyframes loadingBar {
+        0% {
+          transform: translateX(-100%);
+        }
+        50% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(100%);
+        }
       }
 
-      .mannequin-card {
-        max-width: 100%;
-        margin-bottom: 18px;
+      #preloader-bar {
+        animation: loadingBar 1.2s ease-in-out infinite;
       }
-    }
+    </style>
+  </head>
+  <body class="bg-slate-950 text-slate-100 min-h-screen">
+    <!-- Preloader -->
+    <div
+      id="preloader"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950"
+    >
+      <div class="flex flex-col items-center gap-4">
+        <div
+          class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-tr from-pink-500 via-fuchsia-500 to-indigo-500 shadow-lg shadow-pink-500/40 overflow-hidden"
+        >
+          <img
+            src="https://p16-sign-va.tiktokcdn.com/tos-maliva-avt-0068/9f846e4a136758871f1115b9fb9bc92a~tplv-tiktokx-cropcenter:100:100.jpeg?dr=14579&refresh_token=02f4483a&x-expires=1763848800&x-signature=p1U0u%2B6tkClLD6T7NYh%2BcaByyb8%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=maliva"
+            alt="Sharon Thriftwear logo"
+            class="h-full w-full object-cover"
+          />
+        </div>
+        <p class="text-xs font-medium tracking-[0.22em] text-slate-300 uppercase">
+          Loading Sharon Thriftwear
+        </p>
+        <div class="relative h-1.5 w-40 overflow-hidden rounded-full bg-slate-800">
+          <div
+            id="preloader-bar"
+            class="absolute inset-y-0 w-1/2 rounded-full bg-gradient-to-r from-pink-500 via-fuchsia-500 to-indigo-500"
+          ></div>
+        </div>
+      </div>
+    </div>
 
-    @media (max-width: 520px) {
-      body {
-        padding: 18px;
-      }
+    <div class="relative overflow-x-hidden">
+      <!-- Gradient background blob -->
+      <div
+        class="pointer-events-none fixed inset-0 -z-10 bg-gradient-to-br from-pink-500/15 via-fuchsia-500/15 to-indigo-500/15 blur-3xl"
+      ></div>
 
-      .card {
-        padding: 22px 18px 18px;
-      }
+      <!-- Toast notification -->
+      <div
+        data-toast
+        class="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 transform rounded-full bg-slate-900/95 px-4 py-2 text-sm font-medium text-slate-50 shadow-lg shadow-pink-500/30 transition-all duration-200 opacity-0 pointer-events-none translate-y-4"
+      >
+        Copied!
+      </div>
 
-      .brand {
-        margin-bottom: 18px;
-      }
+      <!-- Header / Nav -->
+      <header
+        class="fixed inset-x-0 top-0 z-40 border-b border-slate-800/60 bg-slate-950/80 backdrop-blur"
+      >
+        <div
+          class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 md:px-6"
+        >
+          <a href="#hero" class="flex items-center gap-2">
+            <div
+              class="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-tr from-pink-500 via-fuchsia-500 to-indigo-500 shadow-lg shadow-pink-500/40 overflow-hidden"
+            >
+              <img
+                src="https://p16-sign-va.tiktokcdn.com/tos-maliva-avt-0068/9f846e4a136758871f1115b9fb9bc92a~tplv-tiktokx-cropcenter:100:100.jpeg?dr=14579&refresh_token=02f4483a&x-expires=1763848800&x-signature=p1U0u%2B6tkClLD6T7NYh%2BcaByyb8%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=maliva"
+                alt="Sharon Thriftwear logo"
+                class="h-full w-full object-cover"
+              />
+            </div>
+            <div class="leading-tight">
+              <p class="text-sm font-semibold tracking-tight">
+                Sharon Thriftwear
+              </p>
+              <p class="text-[11px] text-slate-400">Kiambu • Near Ola Energy</p>
+            </div>
+          </a>
 
-      h1 {
-        font-size: 1.85rem;
-      }
+          <!-- Desktop nav -->
+          <nav class="hidden items-center gap-6 text-sm md:flex">
+            <a href="#about" class="text-slate-300 hover:text-pink-400">About</a>
+            <a href="#collection" class="text-slate-300 hover:text-pink-400"
+              >Collection</a
+            >
+            <a href="#tiktok" class="text-slate-300 hover:text-pink-400">TikTok</a>
+            <a href="#delivery" class="text-slate-300 hover:text-pink-400"
+              >Delivery & Payments</a
+            >
+            <a href="#contact" class="text-slate-300 hover:text-pink-400">Contact</a>
+          </nav>
 
-      .form {
-        flex-direction: column;
-      }
+          <!-- Actions -->
+          <div class="flex items-center gap-3">
+            <a
+              href="https://wa.me/254737233022"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="hidden rounded-full bg-pink-500 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-white shadow-lg shadow-pink-500/40 hover:bg-pink-400 md:inline-flex"
+            >
+              Order via WhatsApp
+            </a>
 
-      .btn {
-        width: 100%;
-        justify-content: center;
-      }
+            <!-- Mobile menu button -->
+            <button
+              type="button"
+              aria-label="Toggle navigation"
+              data-menu-toggle
+              class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-700/80 bg-slate-900/80 text-slate-200 shadow-sm shadow-slate-900/60 md:hidden"
+            >
+              <span class="sr-only">Open menu</span>
+              <svg
+                class="h-4 w-4"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M3 6H17M3 10H17M3 14H11"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
 
-      .hanger {
-        inset: 22% 14% auto 14%;
-      }
-
-      .hanger-inner {
-        padding-inline: 18px;
-      }
-    }
-  </style>
-</head>
-<body>
-  <main class="page-shell" aria-label="Sharon Thriftwear maintenance notice">
-    <section>
-      <header class="brand">
-        <div class="brand-mark">S</div>
-        <div class="brand-text">
-          <div class="brand-name">Sharon Thriftwear</div>
-          <div class="brand-tagline">Curated pre-loved fashion</div>
+        <!-- Mobile nav panel -->
+        <div
+          data-mobile-menu
+          class="hidden border-t border-slate-800/60 bg-slate-950/95 md:hidden"
+        >
+          <nav class="mx-auto flex max-w-6xl flex-col gap-1 px-4 py-3 text-sm">
+            <a href="#about" class="rounded-md px-2 py-1.5 text-slate-200 hover:bg-slate-900"
+              >About</a
+            >
+            <a href="#collection" class="rounded-md px-2 py-1.5 text-slate-200 hover:bg-slate-900"
+              >Collection</a
+            >
+            <a href="#tiktok" class="rounded-md px-2 py-1.5 text-slate-200 hover:bg-slate-900"
+              >TikTok</a
+            >
+            <a href="#delivery" class="rounded-md px-2 py-1.5 text-slate-200 hover:bg-slate-900"
+              >Delivery & Payments</a
+            >
+            <a href="#contact" class="rounded-md px-2 py-1.5 text-slate-200 hover:bg-slate-900"
+              >Contact</a
+            >
+            <a
+              href="https://wa.me/254737233022"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="mt-1 inline-flex items-center justify-center rounded-full bg-pink-500 px-3 py-2 text-xs font-semibold uppercase tracking-wide text-white shadow-lg shadow-pink-500/40 hover:bg-pink-400"
+            >
+              Order via WhatsApp
+            </a>
+          </nav>
         </div>
       </header>
 
-      <article class="card">
-        <div class="card-inner">
-          <div class="pill">
-            <span class="status-dot" aria-hidden="true"></span>
-            Website under maintenance
+      <!-- Main content -->
+      <main class="pt-24 md:pt-28">
+        <!-- Hero -->
+        <section
+          id="hero"
+          class="relative mx-auto flex max-w-6xl flex-col gap-10 px-4 pb-16 pt-8 md:flex-row md:items-center md:gap-12 md:px-6 lg:pb-20 lg:pt-12"
+        >
+          <div class="relative z-10 flex-1 space-y-6">
+            <p class="inline-flex items-center gap-2 rounded-full border border-pink-500/40 bg-slate-950/80 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.22em] text-pink-300 shadow-sm shadow-pink-500/30">
+              <span class="h-1.5 w-1.5 rounded-full bg-pink-400"></span>
+              Kiambu's thrift fashion plug
+            </p>
+
+            <h1
+              class="text-balance text-4xl font-black tracking-tight text-slate-50 sm:text-5xl lg:text-6xl"
+            >
+              Sharon
+              <span class="relative inline-block">
+                Thriftwear
+                <span
+                  class="pointer-events-none absolute -bottom-1 left-0 h-2 w-full rounded-full bg-gradient-to-r from-pink-500 via-fuchsia-500 to-indigo-500/80 opacity-80"
+                ></span>
+              </span>
+            </h1>
+
+            <p class="max-w-xl text-balance text-sm leading-relaxed text-slate-300 sm:text-base">
+              Curated thrift pieces for the modern Kenyan girl. From crop tops to
+              maxi dresses and skirts – all sourced with love in
+              <span class="font-semibold text-pink-300">Kiambu Town (near Ola Energy)</span>
+              and delivered countrywide.
+            </p>
+
+            <div class="flex flex-wrap items-center gap-3">
+              <a
+                href="#collection"
+                class="inline-flex items-center gap-2 rounded-full bg-pink-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-pink-500/40 hover:bg-pink-400"
+              >
+                Browse collection
+                <span aria-hidden="true">→</span>
+              </a>
+              <a
+                href="https://wa.me/254737233022"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-2 rounded-full border border-slate-700/90 bg-slate-950/80 px-4 py-2.5 text-sm font-medium text-slate-100 hover:border-pink-500/70 hover:text-pink-200"
+              >
+                Chat on WhatsApp
+              </a>
+            </div>
+
+            <div class="grid gap-3 text-xs text-slate-300 sm:grid-cols-3">
+              <div
+                class="rounded-xl border border-slate-800/80 bg-slate-950/80 px-3 py-2"
+              >
+                <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                  Location
+                </p>
+                <p class="mt-1 font-medium text-slate-100">
+                  Kiambu Town
+                </p>
+                <p class="text-[11px] text-slate-400">Close to Ola Energy</p>
+              </div>
+              <div
+                class="rounded-xl border border-slate-800/80 bg-slate-950/80 px-3 py-2"
+              >
+                <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                  Delivery
+                </p>
+                <p class="mt-1 font-medium text-slate-100">
+                  Countrywide in Kenya
+                </p>
+                <p class="text-[11px] text-slate-400">Same day within Nairobi*</p>
+              </div>
+              <div
+                class="rounded-xl border border-slate-800/80 bg-slate-950/80 px-3 py-2"
+              >
+                <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                  Payments
+                </p>
+                <p class="mt-1 font-medium text-slate-100">
+                  M-Pesa Till <span class="text-pink-300">6918141</span>
+                </p>
+                <button
+                  type="button"
+                  data-copy-till
+                  class="mt-1 text-[11px] font-medium text-pink-300 hover:text-pink-200"
+                >
+                  Copy till number
+                </button>
+              </div>
+            </div>
           </div>
 
-          <h1>We’re refreshing your thrift experience.</h1>
-          <p class="subtitle">
-            Sharon Thriftwear is currently updating the racks and polishing the look.
-            New arrivals, smoother browsing and a better checkout are on their way.
+          <!-- Hero visual -->
+          <div class="relative flex-1 md:pt-4">
+            <div
+              class="absolute -right-10 -top-10 hidden h-40 w-40 rounded-full bg-pink-500/30 blur-3xl md:block"
+            ></div>
+            <div
+              class="relative mx-auto max-w-md rounded-[2rem] border border-slate-800/80 bg-slate-950/80 p-4 shadow-[0_0_60px_rgba(236,72,153,0.25)]"
+            >
+              <div class="flex items-center justify-between gap-2">
+                <p class="text-xs font-semibold tracking-tight text-slate-200">
+                  Thrift Essentials
+                </p>
+                <p class="text-[11px] text-slate-400">Perfect fits. Small prices.</p>
+              </div>
+
+              <div class="mt-4 grid grid-cols-2 gap-3 text-xs">
+                <div
+                  class="flex flex-col justify-between rounded-2xl border border-pink-500/40 bg-gradient-to-br from-pink-500/30 via-fuchsia-500/10 to-slate-950 px-3 py-3 text-slate-50"
+                >
+                  <div>
+                    <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-pink-100/90">
+                      Tops
+                    </p>
+                    <p class="mt-1 text-sm font-semibold">Crop Tops</p>
+                    <p class="mt-1 text-[11px] text-pink-100/80">
+                      Cute, trendy, and thrifted for everyday slay.
+                    </p>
+                  </div>
+                  <p class="mt-3 text-[11px] text-pink-50/90">Perfect with mini skirts.</p>
+                </div>
+                <div class="flex flex-col gap-3">
+                  <div
+                    class="flex-1 rounded-2xl border border-slate-800/80 bg-slate-900/80 px-3 py-3"
+                  >
+                    <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                      Dresses
+                    </p>
+                    <p class="mt-1 text-sm font-semibold text-slate-50">
+                      Maxi & Short
+                    </p>
+                    <p class="mt-1 text-[11px] text-slate-400">
+                      Brunch, dates & nights out.
+                    </p>
+                  </div>
+                  <div
+                    class="flex-1 rounded-2xl border border-slate-800/80 bg-slate-900/80 px-3 py-3"
+                  >
+                    <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                      Skirts
+                    </p>
+                    <p class="mt-1 text-sm font-semibold text-slate-50">
+                      Maxi & Mini
+                    </p>
+                    <p class="mt-1 text-[11px] text-slate-400">
+                      Style for every mood.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-4 flex items-center justify-between text-[11px]">
+                <p class="text-slate-400">
+                  Follow on TikTok:
+                  <a
+                    href="https://www.tiktok.com/@thrifts128"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="font-medium text-pink-300 hover:text-pink-200"
+                    >@thrifts128</a
+                  >
+                </p>
+                <a
+                  href="https://sharonthriftwear.github.io/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-slate-500 hover:text-slate-300"
+                  >sharonthriftwear.github.io</a
+                >
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- About & Location -->
+        <section
+          id="about"
+          class="border-t border-slate-900/70 bg-slate-950/60 py-10 md:py-12"
+        >
+          <div class="mx-auto max-w-6xl px-4 md:px-6">
+            <div class="grid gap-8 md:grid-cols-[1.2fr,1fr] md:items-start">
+              <div>
+                <h2 class="text-xl font-semibold tracking-tight text-slate-50">
+                  About Sharon Thriftwear
+                </h2>
+                <p class="mt-3 max-w-2xl text-sm leading-relaxed text-slate-300">
+                  Sharon Thriftwear is your plug for stylish, carefully selected
+                  thrift pieces in Kiambu. We focus on wearable everyday looks:
+                  crop tops, dresses and skirts that are easy to style and kind
+                  to your budget. Every piece is handpicked, steamed and checked
+                  so you get quality at a thrift price.
+                </p>
+                <p class="mt-3 max-w-2xl text-sm leading-relaxed text-slate-300">
+                  Visit us in
+                  <span class="font-semibold text-pink-200">Kiambu Town, close to Ola Energy</span>
+                  or order remotely and get your items delivered anywhere in
+                  Kenya.
+                </p>
+              </div>
+              <div>
+                <div
+                  class="rounded-2xl border border-slate-800/80 bg-slate-950/90 p-4 text-sm shadow-lg shadow-slate-950/70"
+                >
+                  <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                    Quick location guide
+                  </p>
+                  <p class="mt-2 text-sm font-semibold text-slate-50">
+                    Kiambu Town, near Ola Energy
+                  </p>
+                  <p class="mt-1 text-xs text-slate-400">
+                    Use Ola Energy Kiambu as your reference point, then call or
+                    WhatsApp for exact directions.
+                  </p>
+                  <div class="mt-3 space-y-1.5 text-xs text-slate-300">
+                    <p>• Landmark: Ola Energy Kiambu</p>
+                    <p>• Area: Kiambu Town, Kiambu County</p>
+                    <p>• Country: Kenya</p>
+                  </div>
+                  <div class="mt-3 h-48 overflow-hidden rounded-xl border border-slate-800/80">
+                    <iframe
+                      src="https://www.google.com/maps?q=Ola+Energy+Kiambu,+Kenya&output=embed"
+                      class="h-full w-full border-0"
+                      loading="lazy"
+                      referrerpolicy="no-referrer-when-downgrade"
+                      aria-label="Map showing Sharon Thriftwear location near Ola Energy in Kiambu Town"
+                    ></iframe>
+                  </div>
+                  <p class="mt-1 text-[11px] text-slate-500">
+                    Map pin is approximate. Call or WhatsApp for exact shop directions.
+                  </p>
+                  <button
+                    type="button"
+                    data-copy-phone
+                    class="mt-3 inline-flex items-center gap-2 rounded-full border border-slate-700/80 bg-slate-900/80 px-3 py-1.5 text-[11px] font-medium text-slate-100 hover:border-pink-500/70 hover:text-pink-200"
+                  >
+                    Copy contact number: +254 737 233 022
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Collection / Products -->
+        <section id="collection" class="py-10 md:py-12">
+          <div class="mx-auto max-w-6xl px-4 md:px-6">
+            <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+              <div>
+                <h2 class="text-xl font-semibold tracking-tight text-slate-50">
+                  Shop the collection
+                </h2>
+                <p class="mt-2 max-w-2xl text-sm text-slate-300">
+                  Scroll through some of the thrifted pieces you can expect at
+                  Sharon Thriftwear – crop tops, maxi and short dresses, plus
+                  maxi and mini skirts. For the exact pieces in stock today,
+                  check TikTok or WhatsApp Sharon directly.
+                </p>
+              </div>
+              <div class="flex flex-wrap gap-2 text-[11px]">
+                <button
+                  type="button"
+                  data-filter="all"
+                  class="rounded-full border border-pink-500/40 bg-pink-500/90 px-3 py-1 font-medium text-white shadow-sm shadow-pink-500/40"
+                >
+                  All
+                </button>
+                <button
+                  type="button"
+                  data-filter="crop-tops"
+                  class="rounded-full border border-slate-700/80 bg-slate-950/80 px-3 py-1 font-medium text-slate-200 hover:border-pink-500/70 hover:text-pink-200"
+                >
+                  Crop tops
+                </button>
+                <button
+                  type="button"
+                  data-filter="dresses"
+                  class="rounded-full border border-slate-700/80 bg-slate-950/80 px-3 py-1 font-medium text-slate-200 hover:border-pink-500/70 hover:text-pink-200"
+                >
+                  Dresses
+                </button>
+                <button
+                  type="button"
+                  data-filter="skirts"
+                  class="rounded-full border border-slate-700/80 bg-slate-950/80 px-3 py-1 font-medium text-slate-200 hover:border-pink-500/70 hover:text-pink-200"
+                >
+                  Skirts
+                </button>
+              </div>
+            </div>
+
+            <!-- Product grid with images -->
+            <div class="mt-6 grid gap-5 md:grid-cols-3 lg:grid-cols-4">
+              <!-- Crop top 1 -->
+              <article
+                data-category="crop-tops"
+                class="group flex flex-col overflow-hidden rounded-2xl border border-slate-800/90 bg-slate-950/90 shadow-sm shadow-slate-950/80 transition-all duration-200 hover:-translate-y-0.5 hover:border-pink-500/70 hover:shadow-pink-500/30"
+              >
+                <div class="relative overflow-hidden">
+                  <img
+                    src="https://i.pinimg.com/1200x/e3/b5/4e/e3b54e4c33650454f6533a6d7bb88da8.jpg"
+                    alt="Ribbed crop top styled with jeans"
+                    loading="lazy"
+                    class="h-48 w-full object-contain bg-slate-950 transition-transform duration-300"
+                  />
+                  <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent"></div>
+                  <span
+                    class="absolute left-3 top-3 rounded-full bg-pink-500/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white"
+                    >Crop top</span
+                  >
+                  <span
+                    class="absolute bottom-3 left-3 rounded-full bg-slate-950/85 px-2 py-0.5 text-[10px] font-medium text-pink-100"
+                    >New in</span
+                  >
+                </div>
+                <div class="flex flex-1 flex-col p-3 text-xs">
+                  <h3 class="text-sm font-semibold text-slate-50">
+                    Ribbed pastel crop tops
+                  </h3>
+                  <p class="mt-1 text-slate-300">
+                    Perfect with high-waist jeans or mini skirts. Different
+                    colours and prints.
+                  </p>
+                  <div class="mt-3 flex items-end justify-between gap-2">
+                    <div>
+                      <p class="font-semibold text-pink-300">KES 100 – 300</p>
+                      <p class="text-[11px] text-slate-500">Sizes: UK 6–12 (varies)</p>
+                    </div>
+                    <a
+                      href="https://wa.me/254737233022?text=Hi%20Sharon%2C%20I%27m%20interested%20in%20ribbed%20pastel%20crop%20tops."
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center justify-center rounded-full bg-pink-500 px-3 py-1 text-[11px] font-medium text-white shadow-md shadow-pink-500/40 hover:bg-pink-400"
+                    >
+                      Order on WhatsApp
+                    </a>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Crop top 2 -->
+              <article
+                data-category="crop-tops"
+                class="group flex flex-col overflow-hidden rounded-2xl border border-slate-800/90 bg-slate-950/90 shadow-sm shadow-slate-950/80 transition-all duration-200 hover:-translate-y-0.5 hover:border-pink-500/70 hover:shadow-pink-500/30"
+              >
+                <div class="relative overflow-hidden">
+                  <img
+                    src="https://i.pinimg.com/736x/4e/1c/12/4e1c12598ca2383424325d30bae223e1.jpg"
+                    alt="Graphic crop top outfit"
+                    loading="lazy"
+                    class="h-48 w-full object-contain bg-slate-950 transition-transform duration-300"
+                  />
+                  <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent"></div>
+                  <span
+                    class="absolute left-3 top-3 rounded-full bg-pink-500/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white"
+                    >Crop top</span
+                  >
+                  <span
+                    class="absolute bottom-3 left-3 rounded-full bg-slate-950/85 px-2 py-0.5 text-[10px] font-medium text-emerald-100"
+                    >Best seller</span
+                  >
+                </div>
+                <div class="flex flex-1 flex-col p-3 text-xs">
+                  <h3 class="text-sm font-semibold text-slate-50">
+                    Graphic and statement crops
+                  </h3>
+                  <p class="mt-1 text-slate-300">
+                    TikTok-ready tops that stand out in videos and photos.
+                  </p>
+                  <div class="mt-3 flex items-end justify-between gap-2">
+                    <div>
+                      <p class="font-semibold text-pink-300">KES 100 – 300</p>
+                      <p class="text-[11px] text-slate-500">Limited pieces per drop</p>
+                    </div>
+                    <a
+                      href="https://wa.me/254737233022?text=Hi%20Sharon%2C%20please%20show%20me%20your%20graphic%20and%20statement%20crop%20tops."
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center justify-center rounded-full bg-pink-500 px-3 py-1 text-[11px] font-medium text-white shadow-md shadow-pink-500/40 hover:bg-pink-400"
+                    >
+                      Order on WhatsApp
+                    </a>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Crop top 3 -->
+              <article
+                data-category="crop-tops"
+                class="group flex flex-col overflow-hidden rounded-2xl border border-slate-800/90 bg-slate-950/90 shadow-sm shadow-slate-950/80 transition-all duration-200 hover:-translate-y-0.5 hover:border-pink-500/70 hover:shadow-pink-500/30"
+              >
+                <div class="relative overflow-hidden">
+                  <img
+                    src="https://i.pinimg.com/1200x/f8/49/06/f84906303b64f43d621235f6a606d219.jpg"
+                    alt="Neutral ribbed crop top styled with skirt"
+                    loading="lazy"
+                    class="h-48 w-full object-contain bg-slate-950 transition-transform duration-300"
+                  />
+                  <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent"></div>
+                  <span
+                    class="absolute left-3 top-3 rounded-full bg-pink-500/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white"
+                    >Crop top</span
+                  >
+                  <span
+                    class="absolute bottom-3 left-3 rounded-full bg-slate-950/85 px-2 py-0.5 text-[10px] font-medium text-pink-100"
+                    >Everyday</span
+                  >
+                </div>
+                <div class="flex flex-1 flex-col p-3 text-xs">
+                  <h3 class="text-sm font-semibold text-slate-50">
+                    Neutral ribbed crop tops
+                  </h3>
+                  <p class="mt-1 text-slate-300">
+                    Easy to style with jeans, cargo pants or skirts for daily wear.
+                  </p>
+                  <div class="mt-3 flex items-end justify-between gap-2">
+                    <div>
+                      <p class="font-semibold text-pink-300">KES 100 – 300</p>
+                      <p class="text-[11px] text-slate-500">Comfortable stretch fabric</p>
+                    </div>
+                    <a
+                      href="https://wa.me/254737233022?text=Hi%20Sharon%2C%20please%20show%20me%20your%20neutral%20ribbed%20crop%20tops."
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center justify-center rounded-full bg-pink-500 px-3 py-1 text-[11px] font-medium text-white shadow-md shadow-pink-500/40 hover:bg-pink-400"
+                    >
+                      Order on WhatsApp
+                    </a>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Crop top 4 -->
+              <article
+                data-category="crop-tops"
+                class="group flex flex-col overflow-hidden rounded-2xl border border-slate-800/90 bg-slate-950/90 shadow-sm shadow-slate-950/80 transition-all duration-200 hover:-translate-y-0.5 hover:border-pink-500/70 hover:shadow-pink-500/30"
+              >
+                <div class="relative overflow-hidden">
+                  <img
+                    src="https://i.pinimg.com/1200x/9b/38/20/9b3820ea7f409be5522d87c78e426e8d.jpg"
+                    alt="Bright coloured crop top outfit"
+                    loading="lazy"
+                    class="h-48 w-full object-contain bg-slate-950 transition-transform duration-300"
+                  />
+                  <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent"></div>
+                  <span
+                    class="absolute left-3 top-3 rounded-full bg-pink-500/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white"
+                    >Crop top</span
+                  >
+                  <span
+                    class="absolute bottom-3 left-3 rounded-full bg-slate-950/85 px-2 py-0.5 text-[10px] font-medium text-emerald-100"
+                    >Bold look</span
+                  >
+                </div>
+                <div class="flex flex-1 flex-col p-3 text-xs">
+                  <h3 class="text-sm font-semibold text-slate-50">
+                    Bright and bold crop tops
+                  </h3>
+                  <p class="mt-1 text-slate-300">
+                    Stand-out colours for parties, brunch and TikTok videos.
+                  </p>
+                  <div class="mt-3 flex items-end justify-between gap-2">
+                    <div>
+                      <p class="font-semibold text-pink-300">KES 100 – 300</p>
+                      <p class="text-[11px] text-slate-500">Limited statement pieces</p>
+                    </div>
+                    <a
+                      href="https://wa.me/254737233022?text=Hi%20Sharon%2C%20please%20show%20me%20your%20bright%20and%20bold%20crop%20tops."
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center justify-center rounded-full bg-pink-500 px-3 py-1 text-[11px] font-medium text-white shadow-md shadow-pink-500/40 hover:bg-pink-400"
+                    >
+                      Order on WhatsApp
+                    </a>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Maxi dress 1 -->
+              <article
+                data-category="dresses"
+                class="group flex flex-col overflow-hidden rounded-2xl border border-slate-800/90 bg-slate-950/90 shadow-sm shadow-slate-950/80 transition-all duration-200 hover:-translate-y-0.5 hover:border-pink-500/70 hover:shadow-pink-500/30"
+              >
+                <div class="relative overflow-hidden">
+                  <img
+                    src="https://i.pinimg.com/1200x/19/e3/fe/19e3fe42d4ed3025ce871ca9cf7af476.jpg"
+                    alt="Floral thrifted maxi dress"
+                    loading="lazy"
+                    class="h-48 w-full object-contain bg-slate-950 transition-transform duration-300"
+                  />
+                  <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent"></div>
+                  <span
+                    class="absolute left-3 top-3 rounded-full bg-fuchsia-500/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white"
+                    >Maxi dress</span
+                  >
+                  <span
+                    class="absolute bottom-3 left-3 rounded-full bg-slate-950/85 px-2 py-0.5 text-[10px] font-medium text-fuchsia-100"
+                    >Brunch / events</span
+                  >
+                </div>
+                <div class="flex flex-1 flex-col p-3 text-xs">
+                  <h3 class="text-sm font-semibold text-slate-50">
+                    Flowy floral maxi dresses
+                  </h3>
+                  <p class="mt-1 text-slate-300">
+                    Feminine pieces perfect for brunch, church, dates and events.
+                  </p>
+                  <div class="mt-3 flex items-end justify-between gap-2">
+                    <div>
+                      <p class="font-semibold text-pink-300">KES 800 – 1,300</p>
+                      <p class="text-[11px] text-slate-500">Sizes: UK 6–16 (varies)</p>
+                    </div>
+                    <a
+                      href="https://wa.me/254737233022?text=Hi%20Sharon%2C%20I%27d%20love%20to%20see%20your%20flowy%20floral%20maxi%20dresses."
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center justify-center rounded-full bg-pink-500 px-3 py-1 text-[11px] font-medium text-white shadow-md shadow-pink-500/40 hover:bg-pink-400"
+                    >
+                      Order on WhatsApp
+                    </a>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Maxi dress 2 -->
+              <article
+                data-category="dresses"
+                class="group flex flex-col overflow-hidden rounded-2xl border border-slate-800/90 bg-slate-950/90 shadow-sm shadow-slate-950/80 transition-all duration-200 hover:-translate-y-0.5 hover:border-pink-500/70 hover:shadow-pink-500/30"
+              >
+                <div class="relative overflow-hidden">
+                  <img
+                    src="https://i.pinimg.com/1200x/2f/1e/d9/2f1ed9915250bb362a7290e6cc4a2ff0.jpg"
+                    alt="Elegant solid colour maxi dress"
+                    loading="lazy"
+                    class="h-48 w-full object-contain bg-slate-950 transition-transform duration-300"
+                  />
+                  <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent"></div>
+                  <span
+                    class="absolute left-3 top-3 rounded-full bg-fuchsia-500/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white"
+                    >Maxi dress</span
+                  >
+                  <span
+                    class="absolute bottom-3 left-3 rounded-full bg-slate-950/85 px-2 py-0.5 text-[10px] font-medium text-fuchsia-100"
+                    >Date night</span
+                  >
+                </div>
+                <div class="flex flex-1 flex-col p-3 text-xs">
+                  <h3 class="text-sm font-semibold text-slate-50">
+                    Elegant solid maxi dresses
+                  </h3>
+                  <p class="mt-1 text-slate-300">
+                    Simple but classy maxi dresses ideal for dinners and events.
+                  </p>
+                  <div class="mt-3 flex items-end justify-between gap-2">
+                    <div>
+                      <p class="font-semibold text-pink-300">KES 800 – 1,300</p>
+                      <p class="text-[11px] text-slate-500">Dress up with heels or sandals</p>
+                    </div>
+                    <a
+                      href="https://wa.me/254737233022?text=Hi%20Sharon%2C%20please%20show%20me%20your%20elegant%20solid%20maxi%20dresses."
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center justify-center rounded-full bg-pink-500 px-3 py-1 text-[11px] font-medium text-white shadow-md shadow-pink-500/40 hover:bg-pink-400"
+                    >
+                      Order on WhatsApp
+                    </a>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Maxi dress 3 -->
+              <article
+                data-category="dresses"
+                class="group flex flex-col overflow-hidden rounded-2xl border border-slate-800/90 bg-slate-950/90 shadow-sm shadow-slate-950/80 transition-all duration-200 hover:-translate-y-0.5 hover:border-pink-500/70 hover:shadow-pink-500/30"
+              >
+                <div class="relative overflow-hidden">
+                  <img
+                    src="https://i.pinimg.com/1200x/86/e7/99/86e799204ff50cef0fa782d348e95fc1.jpg"
+                    alt="Printed maxi dress outfit"
+                    loading="lazy"
+                    class="h-48 w-full object-contain bg-slate-950 transition-transform duration-300"
+                  />
+                  <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent"></div>
+                  <span
+                    class="absolute left-3 top-3 rounded-full bg-fuchsia-500/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white"
+                    >Maxi dress</span
+                  >
+                  <span
+                    class="absolute bottom-3 left-3 rounded-full bg-slate-950/85 px-2 py-0.5 text-[10px] font-medium text-emerald-100"
+                    >Everyday</span
+                  >
+                </div>
+                <div class="flex flex-1 flex-col p-3 text-xs">
+                  <h3 class="text-sm font-semibold text-slate-50">
+                    Printed everyday maxi dresses
+                  </h3>
+                  <p class="mt-1 text-slate-300">
+                    Easy throw-on maxi dresses for errands, church and casual days.
+                  </p>
+                  <div class="mt-3 flex items-end justify-between gap-2">
+                    <div>
+                      <p class="font-semibold text-pink-300">KES 800 – 1,300</p>
+                      <p class="text-[11px] text-slate-500">Comfortable relaxed fit</p>
+                    </div>
+                    <a
+                      href="https://wa.me/254737233022?text=Hi%20Sharon%2C%20please%20show%20me%20your%20printed%20everyday%20maxi%20dresses."
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center justify-center rounded-full bg-pink-500 px-3 py-1 text-[11px] font-medium text-white shadow-md shadow-pink-500/40 hover:bg-pink-400"
+                    >
+                      Order on WhatsApp
+                    </a>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Maxi dress 4 -->
+              <article
+                data-category="dresses"
+                class="group flex flex-col overflow-hidden rounded-2xl border border-slate-800/90 bg-slate-950/90 shadow-sm shadow-slate-950/80 transition-all duration-200 hover:-translate-y-0.5 hover:border-pink-500/70 hover:shadow-pink-500/30"
+              >
+                <div class="relative overflow-hidden">
+                  <img
+                    src="https://i.pinimg.com/1200x/fc/f8/61/fcf8612cf9aea5dccf5c431f1255857c.jpg"
+                    alt="Chic black maxi dress outfit"
+                    loading="lazy"
+                    class="h-48 w-full object-contain bg-slate-950 transition-transform duration-300"
+                  />
+                  <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent"></div>
+                  <span
+                    class="absolute left-3 top-3 rounded-full bg-fuchsia-500/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white"
+                    >Maxi dress</span
+                  >
+                  <span
+                    class="absolute bottom-3 left-3 rounded-full bg-slate-950/85 px-2 py-0.5 text-[10px] font-medium text-indigo-100"
+                    >Night out</span
+                  >
+                </div>
+                <div class="flex flex-1 flex-col p-3 text-xs">
+                  <h3 class="text-sm font-semibold text-slate-50">
+                    Chic black maxi dresses
+                  </h3>
+                  <p class="mt-1 text-slate-300">
+                    Classic black maxi dresses for evenings, dinners and events.
+                  </p>
+                  <div class="mt-3 flex items-end justify-between gap-2">
+                    <div>
+                      <p class="font-semibold text-pink-300">KES 800 – 1,300</p>
+                      <p class="text-[11px] text-slate-500">Dress up with jewellery and heels</p>
+                    </div>
+                    <a
+                      href="https://wa.me/254737233022?text=Hi%20Sharon%2C%20please%20show%20me%20your%20chic%20black%20maxi%20dresses."
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center justify-center rounded-full bg-pink-500 px-3 py-1 text-[11px] font-medium text-white shadow-md shadow-pink-500/40 hover:bg-pink-400"
+                    >
+                      Order on WhatsApp
+                    </a>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Short dress 1 -->
+              <article
+                data-category="dresses"
+                class="group flex flex-col overflow-hidden rounded-2xl border border-slate-800/90 bg-slate-950/90 shadow-sm shadow-slate-950/80 transition-all duration-200 hover:-translate-y-0.5 hover:border-pink-500/70 hover:shadow-pink-500/30"
+              >
+                <div class="relative overflow-hidden">
+                  <img
+                    src="https://i.pinimg.com/1200x/91/d2/d5/91d2d5ac48204a97d9054d19d7a704c7.jpg"
+                    alt="Short bodycon dress outfit"
+                    loading="lazy"
+                    class="h-48 w-full object-contain bg-slate-950 transition-transform duration-300"
+                  />
+                  <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent"></div>
+                  <span
+                    class="absolute left-3 top-3 rounded-full bg-indigo-500/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white"
+                    >Short dress</span
+                  >
+                  <span
+                    class="absolute bottom-3 left-3 rounded-full bg-slate-950/85 px-2 py-0.5 text-[10px] font-medium text-indigo-100"
+                    >Date night</span
+                  >
+                </div>
+                <div class="flex flex-1 flex-col p-3 text-xs">
+                  <h3 class="text-sm font-semibold text-slate-50">
+                    Bodycon short dresses
+                  </h3>
+                  <p class="mt-1 text-slate-300">
+                    Night-out and weekend pieces that hug in the right places.
+                  </p>
+                  <div class="mt-3 flex items-end justify-between gap-2">
+                    <div>
+                      <p class="font-semibold text-pink-300">KES 800 – 900</p>
+                      <p class="text-[11px] text-slate-500">Perfect with heels or sneakers</p>
+                    </div>
+                    <a
+                      href="https://wa.me/254737233022?text=Hi%20Sharon%2C%20please%20show%20me%20your%20bodycon%20short%20dresses."
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center justify-center rounded-full bg-pink-500 px-3 py-1 text-[11px] font-medium text-white shadow-md shadow-pink-500/40 hover:bg-pink-400"
+                    >
+                      Order on WhatsApp
+                    </a>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Short dress 2 -->
+              <article
+                data-category="dresses"
+                class="group flex flex-col overflow-hidden rounded-2xl border border-slate-800/90 bg-slate-950/90 shadow-sm shadow-slate-950/80 transition-all duration-200 hover:-translate-y-0.5 hover:border-pink-500/70 hover:shadow-pink-500/30"
+              >
+                <div class="relative overflow-hidden">
+                  <img
+                    src="https://i.pinimg.com/736x/26/9c/1c/269c1c45dcfa49713d6a9dc5955abee4.jpg"
+                    alt="Cute short flare dress outfit"
+                    loading="lazy"
+                    class="h-48 w-full object-contain bg-slate-950 transition-transform duration-300"
+                  />
+                  <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent"></div>
+                  <span
+                    class="absolute left-3 top-3 rounded-full bg-indigo-500/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white"
+                    >Short dress</span
+                  >
+                  <span
+                    class="absolute bottom-3 left-3 rounded-full bg-slate-950/85 px-2 py-0.5 text-[10px] font-medium text-emerald-100"
+                    >Brunch</span
+                  >
+                </div>
+                <div class="flex flex-1 flex-col p-3 text-xs">
+                  <h3 class="text-sm font-semibold text-slate-50">
+                    Flirty brunch short dresses
+                  </h3>
+                  <p class="mt-1 text-slate-300">
+                    Playful dresses perfect for brunch with the girls and dates.
+                  </p>
+                  <div class="mt-3 flex items-end justify-between gap-2">
+                    <div>
+                      <p class="font-semibold text-pink-300">KES 800 – 900</p>
+                      <p class="text-[11px] text-slate-500">Fun colours and prints</p>
+                    </div>
+                    <a
+                      href="https://wa.me/254737233022?text=Hi%20Sharon%2C%20please%20show%20me%20your%20brunch%20short%20dresses."
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center justify-center rounded-full bg-pink-500 px-3 py-1 text-[11px] font-medium text-white shadow-md shadow-pink-500/40 hover:bg-pink-400"
+                    >
+                      Order on WhatsApp
+                    </a>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Short dress 3 -->
+              <article
+                data-category="dresses"
+                class="group flex flex-col overflow-hidden rounded-2xl border border-slate-800/90 bg-slate-950/90 shadow-sm shadow-slate-950/80 transition-all duration-200 hover:-translate-y-0.5 hover:border-pink-500/70 hover:shadow-pink-500/30"
+              >
+                <div class="relative overflow-hidden">
+                  <img
+                    src="https://i.pinimg.com/1200x/0d/03/f1/0d03f1b9fc544cfef9ae1d1d65535915.jpg"
+                    alt="Casual short dress with sneakers"
+                    loading="lazy"
+                    class="h-48 w-full object-contain bg-slate-950 transition-transform duration-300"
+                  />
+                  <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent"></div>
+                  <span
+                    class="absolute left-3 top-3 rounded-full bg-indigo-500/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white"
+                    >Short dress</span
+                  >
+                  <span
+                    class="absolute bottom-3 left-3 rounded-full bg-slate-950/85 px-2 py-0.5 text-[10px] font-medium text-pink-100"
+                    >Casual day</span
+                  >
+                </div>
+                <div class="flex flex-1 flex-col p-3 text-xs">
+                  <h3 class="text-sm font-semibold text-slate-50">
+                    Casual everyday short dresses
+                  </h3>
+                  <p class="mt-1 text-slate-300">
+                    Throw-on dresses you can style with sneakers or sandals.
+                  </p>
+                  <div class="mt-3 flex items-end justify-between gap-2">
+                    <div>
+                      <p class="font-semibold text-pink-300">KES 800 – 900</p>
+                      <p class="text-[11px] text-slate-500">Easy to wear and comfortable</p>
+                    </div>
+                    <a
+                      href="https://wa.me/254737233022?text=Hi%20Sharon%2C%20please%20show%20me%20your%20casual%20everyday%20short%20dresses."
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center justify-center rounded-full bg-pink-500 px-3 py-1 text-[11px] font-medium text-white shadow-md shadow-pink-500/40 hover:bg-pink-400"
+                    >
+                      Order on WhatsApp
+                    </a>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Short dress 4 -->
+              <article
+                data-category="dresses"
+                class="group flex flex-col overflow-hidden rounded-2xl border border-slate-800/90 bg-slate-950/90 shadow-sm shadow-slate-950/80 transition-all duration-200 hover:-translate-y-0.5 hover:border-pink-500/70 hover:shadow-pink-500/30"
+              >
+                <div class="relative overflow-hidden">
+                  <img
+                    src="https://i.pinimg.com/1200x/f3/c8/38/f3c838351264bdd79ab24ddbd64b1389.jpg"
+                    alt="Cute party short dress outfit"
+                    loading="lazy"
+                    class="h-48 w-full object-contain bg-slate-950 transition-transform duration-300"
+                  />
+                  <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent"></div>
+                  <span
+                    class="absolute left-3 top-3 rounded-full bg-indigo-500/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white"
+                    >Short dress</span
+                  >
+                  <span
+                    class="absolute bottom-3 left-3 rounded-full bg-slate-950/85 px-2 py-0.5 text-[10px] font-medium text-amber-100"
+                    >Party</span
+                  >
+                </div>
+                <div class="flex flex-1 flex-col p-3 text-xs">
+                  <h3 class="text-sm font-semibold text-slate-50">
+                    Party and night-out short dresses
+                  </h3>
+                  <p class="mt-1 text-slate-300">
+                    Fun dresses for nights out, birthdays and special events.
+                  </p>
+                  <div class="mt-3 flex items-end justify-between gap-2">
+                    <div>
+                      <p class="font-semibold text-pink-300">KES 800 – 900</p>
+                      <p class="text-[11px] text-slate-500">Limited drop pieces</p>
+                    </div>
+                    <a
+                      href="https://wa.me/254737233022?text=Hi%20Sharon%2C%20please%20show%20me%20your%20party%20and%20night-out%20short%20dresses."
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center justify-center rounded-full bg-pink-500 px-3 py-1 text-[11px] font-medium text-white shadow-md shadow-pink-500/40 hover:bg-pink-400"
+                    >
+                      Order on WhatsApp
+                    </a>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Maxi skirt 1 -->
+              <article
+                data-category="skirts"
+                class="group flex flex-col overflow-hidden rounded-2xl border border-slate-800/90 bg-slate-950/90 shadow-sm shadow-slate-950/80 transition-all duration-200 hover:-translate-y-0.5 hover:border-pink-500/70 hover:shadow-pink-500/30"
+              >
+                <div class="relative overflow-hidden">
+                  <img
+                    src="https://i.pinimg.com/1200x/26/4e/3b/264e3bf791b608ad4d24f167d7db7c2c.jpg"
+                    alt="Thrifted flowy maxi skirt outfit"
+                    loading="lazy"
+                    class="h-48 w-full object-contain bg-slate-950 transition-transform duration-300"
+                  />
+                  <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent"></div>
+                  <span
+                    class="absolute left-3 top-3 rounded-full bg-emerald-500/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white"
+                    >Maxi skirt</span
+                  >
+                  <span
+                    class="absolute bottom-3 left-3 rounded-full bg-slate-950/85 px-2 py-0.5 text-[10px] font-medium text-emerald-100"
+                    >Office / modest</span
+                  >
+                </div>
+                <div class="flex flex-1 flex-col p-3 text-xs">
+                  <h3 class="text-sm font-semibold text-slate-50">
+                    Flowy and fitted maxi skirts
+                  </h3>
+                  <p class="mt-1 text-slate-300">
+                    Style with crop tops, bodysuits or knits for a chic, modest look.
+                  </p>
+                  <div class="mt-3 flex items-end justify-between gap-2">
+                    <div>
+                      <p class="font-semibold text-pink-300">KES 300 – 400</p>
+                      <p class="text-[11px] text-slate-500">Perfect for work or church</p>
+                    </div>
+                    <a
+                      href="https://wa.me/254737233022?text=Hi%20Sharon%2C%20I%27m%20looking%20for%20thrifted%20maxi%20skirts.%20Please%20share%20options."
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center justify-center rounded-full bg-pink-500 px-3 py-1 text-[11px] font-medium text-white shadow-md shadow-pink-500/40 hover:bg-pink-400"
+                    >
+                      Order on WhatsApp
+                    </a>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Maxi skirt 2 -->
+              <article
+                data-category="skirts"
+                class="group flex flex-col overflow-hidden rounded-2xl border border-slate-800/90 bg-slate-950/90 shadow-sm shadow-slate-950/80 transition-all duration-200 hover:-translate-y-0.5 hover:border-pink-500/70 hover:shadow-pink-500/30"
+              >
+                <div class="relative overflow-hidden">
+                  <img
+                    src="https://i.pinimg.com/736x/9f/3e/8f/9f3e8fb82218eb810abcf23f7da9c99a.jpg"
+                    alt="Maxi skirt with crop top thrifted outfit"
+                    loading="lazy"
+                    class="h-48 w-full object-contain bg-slate-950 transition-transform duration-300"
+                  />
+                  <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent"></div>
+                  <span
+                    class="absolute left-3 top-3 rounded-full bg-emerald-500/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white"
+                    >Maxi skirt</span
+                  >
+                  <span
+                    class="absolute bottom-3 left-3 rounded-full bg-slate-950/85 px-2 py-0.5 text-[10px] font-medium text-emerald-100"
+                    >Casual / chic</span
+                  >
+                </div>
+                <div class="flex flex-1 flex-col p-3 text-xs">
+                  <h3 class="text-sm font-semibold text-slate-50">
+                    Casual chic maxi skirts
+                  </h3>
+                  <p class="mt-1 text-slate-300">
+                    Pair with fitted tops or crops for brunch, dates or church.
+                  </p>
+                  <div class="mt-3 flex items-end justify-between gap-2">
+                    <div>
+                      <p class="font-semibold text-pink-300">KES 300 – 400</p>
+                      <p class="text-[11px] text-slate-500">Most pieces are high-waisted</p>
+                    </div>
+                    <a
+                      href="https://wa.me/254737233022?text=Hi%20Sharon%2C%20please%20show%20me%20more%20casual%20chic%20maxi%20skirts."
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center justify-center rounded-full bg-pink-500 px-3 py-1 text-[11px] font-medium text-white shadow-md shadow-pink-500/40 hover:bg-pink-400"
+                    >
+                      Order on WhatsApp
+                    </a>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Mini skirt 1 -->
+              <article
+                data-category="skirts"
+                class="group flex flex-col overflow-hidden rounded-2xl border border-slate-800/90 bg-slate-950/90 shadow-sm shadow-slate-950/80 transition-all duration-200 hover:-translate-y-0.5 hover:border-pink-500/70 hover:shadow-pink-500/30"
+              >
+                <div class="relative overflow-hidden">
+                  <img
+                    src="https://i.pinimg.com/736x/c1/5e/f5/c15ef57273ca1569a878a4c24b93e1cb.jpg"
+                    alt="Denim mini skirt thrifted outfit"
+                    loading="lazy"
+                    class="h-48 w-full object-contain bg-slate-950 transition-transform duration-300"
+                  />
+                  <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent"></div>
+                  <span
+                    class="absolute left-3 top-3 rounded-full bg-amber-500/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white"
+                    >Mini skirt</span
+                  >
+                  <span
+                    class="absolute bottom-3 left-3 rounded-full bg-slate-950/85 px-2 py-0.5 text-[10px] font-medium text-amber-100"
+                    >Weekends</span
+                  >
+                </div>
+                <div class="flex flex-1 flex-col p-3 text-xs">
+                  <h3 class="text-sm font-semibold text-slate-50">
+                    Denim and pleated mini skirts
+                  </h3>
+                  <p class="mt-1 text-slate-300">
+                    For days you want legs out and confidence high.
+                  </p>
+                  <div class="mt-3 flex items-end justify-between gap-2">
+                    <div>
+                      <p class="font-semibold text-pink-300">KES 200 – 400</p>
+                      <p class="text-[11px] text-slate-500">Pair with oversized tees or crops</p>
+                    </div>
+                    <a
+                      href="https://wa.me/254737233022?text=Hi%20Sharon%2C%20please%20show%20me%20your%20denim%20and%20pleated%20mini%20skirts."
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center justify-center rounded-full bg-pink-500 px-3 py-1 text-[11px] font-medium text-white shadow-md shadow-pink-500/40 hover:bg-pink-400"
+                    >
+                      Order on WhatsApp
+                    </a>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Mini skirt 2 -->
+              <article
+                data-category="skirts"
+                class="group flex flex-col overflow-hidden rounded-2xl border border-slate-800/90 bg-slate-950/90 shadow-sm shadow-slate-950/80 transition-all duration-200 hover:-translate-y-0.5 hover:border-pink-500/70 hover:shadow-pink-500/30"
+              >
+                <div class="relative overflow-hidden">
+                  <img
+                    src="https://i.pinimg.com/736x/47/0c/4a/470c4a1344e4d4b80e9ffe19fcd0ab16.jpg"
+                    alt="Pleated mini skirt thrifted look"
+                    loading="lazy"
+                    class="h-48 w-full object-contain bg-slate-950 transition-transform duration-300"
+                  />
+                  <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent"></div>
+                  <span
+                    class="absolute left-3 top-3 rounded-full bg-amber-500/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white"
+                    >Mini skirt</span
+                  >
+                  <span
+                    class="absolute bottom-3 left-3 rounded-full bg-slate-950/85 px-2 py-0.5 text-[10px] font-medium text-amber-100"
+                    >Girls' day out</span
+                  >
+                </div>
+                <div class="flex flex-1 flex-col p-3 text-xs">
+                  <h3 class="text-sm font-semibold text-slate-50">
+                    Fun mini skirt outfits
+                  </h3>
+                  <p class="mt-1 text-slate-300">
+                    Style with graphic tees, crops or bodysuits for brunch and nights out.
+                  </p>
+                  <div class="mt-3 flex items-end justify-between gap-2">
+                    <div>
+                      <p class="font-semibold text-pink-300">KES 200 – 400</p>
+                      <p class="text-[11px] text-slate-500">Most pieces are high-waist fits</p>
+                    </div>
+                    <a
+                      href="https://wa.me/254737233022?text=Hi%20Sharon%2C%20kindly%20share%20more%20fun%20mini%20skirt%20outfits."
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center justify-center rounded-full bg-pink-500 px-3 py-1 text-[11px] font-medium text-white shadow-md shadow-pink-500/40 hover:bg-pink-400"
+                    >
+                      Order on WhatsApp
+                    </a>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Dress set 1 -->
+              <article
+                data-category="dresses"
+                class="group flex flex-col overflow-hidden rounded-2xl border border-slate-800/90 bg-slate-950/90 shadow-sm shadow-slate-950/80 transition-all duration-200 hover:-translate-y-0.5 hover:border-pink-500/70 hover:shadow-pink-500/30"
+              >
+                <div class="relative overflow-hidden">
+                  <img
+                    src="https://i.pinimg.com/736x/bc/0a/df/bc0adf3f54b95072c1d3917b77329a66.jpg"
+                    alt="Two-piece thrifted co-ord skirt set"
+                    loading="lazy"
+                    class="h-48 w-full object-contain bg-slate-950 transition-transform duration-300"
+                  />
+                  <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent"></div>
+                  <span
+                    class="absolute left-3 top-3 rounded-full bg-sky-500/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white"
+                    >Dress set</span
+                  >
+                  <span
+                    class="absolute bottom-3 left-3 rounded-full bg-slate-950/85 px-2 py-0.5 text-[10px] font-medium text-sky-100"
+                    >Easy wear</span
+                  >
+                </div>
+                <div class="flex flex-1 flex-col p-3 text-xs">
+                  <h3 class="text-sm font-semibold text-slate-50">
+                    Co-ords, wrap and casual dresses
+                  </h3>
+                  <p class="mt-1 text-slate-300">
+                    Effortless skirt and top sets you just throw on and go.
+                  </p>
+                  <div class="mt-3 flex items-end justify-between gap-2">
+                    <div>
+                      <p class="font-semibold text-pink-300">KES 800 – 1,200</p>
+                      <p class="text-[11px] text-slate-500">Limited pieces per drop</p>
+                    </div>
+                    <a
+                      href="https://wa.me/254737233022?text=Hi%20Sharon%2C%20I%27m%20interested%20in%20your%20two-piece%20sets%20and%20casual%20dresses."
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center justify-center rounded-full bg-pink-500 px-3 py-1 text-[11px] font-medium text-white shadow-md shadow-pink-500/40 hover:bg-pink-400"
+                    >
+                      Order on WhatsApp
+                    </a>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Dress set 2 -->
+              <article
+                data-category="dresses"
+                class="group flex flex-col overflow-hidden rounded-2xl border border-slate-800/90 bg-slate-950/90 shadow-sm shadow-slate-950/80 transition-all duration-200 hover:-translate-y-0.5 hover:border-pink-500/70 hover:shadow-pink-500/30"
+              >
+                <div class="relative overflow-hidden">
+                  <img
+                    src="https://i.pinimg.com/736x/42/c8/b8/42c8b88ea3f75d85283140a8397568be.jpg"
+                    alt="Thrifted co-ord skirt and top set"
+                    loading="lazy"
+                    class="h-48 w-full object-contain bg-slate-950 transition-transform duration-300"
+                  />
+                  <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent"></div>
+                  <span
+                    class="absolute left-3 top-3 rounded-full bg-sky-500/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white"
+                    >Dress set</span
+                  >
+                  <span
+                    class="absolute bottom-3 left-3 rounded-full bg-slate-950/85 px-2 py-0.5 text-[10px] font-medium text-sky-100"
+                    >Co-ord set</span
+                  >
+                </div>
+                <div class="flex flex-1 flex-col p-3 text-xs">
+                  <h3 class="text-sm font-semibold text-slate-50">
+                    Matching skirt sets
+                  </h3>
+                  <p class="mt-1 text-slate-300">
+                    Matching sets for brunch, dates and casual weekends.
+                  </p>
+                  <div class="mt-3 flex items-end justify-between gap-2">
+                    <div>
+                      <p class="font-semibold text-pink-300">KES 800 – 1,200</p>
+                      <p class="text-[11px] text-slate-500">Very limited pieces</p>
+                    </div>
+                    <a
+                      href="https://wa.me/254737233022?text=Hi%20Sharon%2C%20please%20share%20more%20matching%20skirt%20sets."
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center justify-center rounded-full bg-pink-500 px-3 py-1 text-[11px] font-medium text-white shadow-md shadow-pink-500/40 hover:bg-pink-400"
+                    >
+                      Order on WhatsApp
+                    </a>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Dress set 3 -->
+              <article
+                data-category="dresses"
+                class="group flex flex-col overflow-hidden rounded-2xl border border-slate-800/90 bg-slate-950/90 shadow-sm shadow-slate-950/80 transition-all duration-200 hover:-translate-y-0.5 hover:border-pink-500/70 hover:shadow-pink-500/30"
+              >
+                <div class="relative overflow-hidden">
+                  <img
+                    src="https://i.pinimg.com/736x/f9/8b/9e/f98b9eedb598d93d487f805f2e92a321.jpg"
+                    alt="Casual thrifted two-piece set"
+                    loading="lazy"
+                    class="h-48 w-full object-contain bg-slate-950 transition-transform duration-300"
+                  />
+                  <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent"></div>
+                  <span
+                    class="absolute left-3 top-3 rounded-full bg-sky-500/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white"
+                    >Dress set</span
+                  >
+                  <span
+                    class="absolute bottom-3 left-3 rounded-full bg-slate-950/85 px-2 py-0.5 text-[10px] font-medium text-sky-100"
+                    >Casual day</span
+                  >
+                </div>
+                <div class="flex flex-1 flex-col p-3 text-xs">
+                  <h3 class="text-sm font-semibold text-slate-50">
+                    Casual and comfy sets
+                  </h3>
+                  <p class="mt-1 text-slate-300">
+                    Easy throw-on two-piece outfits for errands and relaxed days.
+                  </p>
+                  <div class="mt-3 flex items-end justify-between gap-2">
+                    <div>
+                      <p class="font-semibold text-pink-300">KES 800 – 1,200</p>
+                      <p class="text-[11px] text-slate-500">Great for everyday wear</p>
+                    </div>
+                    <a
+                      href="https://wa.me/254737233022?text=Hi%20Sharon%2C%20kindly%20show%20me%20more%20casual%20two-piece%20sets."
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center justify-center rounded-full bg-pink-500 px-3 py-1 text-[11px] font-medium text-white shadow-md shadow-pink-500/40 hover:bg-pink-400"
+                    >
+                      Order on WhatsApp
+                    </a>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <p class="mt-4 text-[11px] text-slate-500">
+              These are sample looks to show our vibe – actual pieces change
+              with every thrift haul. For the latest stock, check our
+              <a
+                href="#tiktok"
+                class="font-medium text-pink-300 hover:text-pink-200"
+                >TikTok</a
+              >
+              or WhatsApp us with your size, budget and style.
+            </p>
+          </div>
+        </section>
+
+        <!-- TikTok Section -->
+        <section
+          id="tiktok"
+          class="border-y border-slate-900/70 bg-slate-950/60 py-10 md:py-12"
+        >
+          <div class="mx-auto max-w-6xl px-4 md:px-6">
+            <div class="grid gap-8 md:grid-cols-[1.1fr,1.2fr] md:items-center">
+              <div>
+                <h2 class="text-xl font-semibold tracking-tight text-slate-50">
+                  See the fits on TikTok
+                </h2>
+                <p class="mt-2 max-w-xl text-sm text-slate-300">
+                  Get a closer look at how Sharon Thriftwear pieces move and fit
+                  in real life. Follow
+                  <span class="font-semibold text-pink-200">@thrifts128</span>
+                  for try-ons, styling tips and new-stock alerts.
+                </p>
+                <dl class="mt-4 space-y-2 text-xs text-slate-300">
+                  <div class="flex gap-2">
+                    <dt class="w-20 text-slate-400">Account</dt>
+                    <dd>
+                      <a
+                        href="https://www.tiktok.com/@thrifts128"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="font-medium text-pink-300 hover:text-pink-200"
+                        >@thrifts128</a
+                      >
+                    </dd>
+                  </div>
+                  <div class="flex gap-2">
+                    <dt class="w-20 text-slate-400">Content</dt>
+                    <dd>
+                      Hauls, styling ideas, size references and live shopping.
+                    </dd>
+                  </div>
+                </dl>
+
+                <div class="mt-4 flex flex-wrap gap-3 text-[11px]">
+                  <a
+                    href="https://www.tiktok.com/@thrifts128"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-2 rounded-full bg-pink-500 px-4 py-1.5 font-medium text-white shadow-lg shadow-pink-500/40 hover:bg-pink-400"
+                  >
+                    Open TikTok profile
+                  </a>
+                  <a
+                    href="https://sharonthriftwear.github.io/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-2 rounded-full border border-slate-700/80 bg-slate-950/80 px-4 py-1.5 font-medium text-slate-200 hover:border-pink-500/70 hover:text-pink-200"
+                  >
+                    Visit website
+                  </a>
+                </div>
+              </div>
+
+              <div>
+                <div
+                  class="mx-auto max-w-md overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-950/90 shadow-xl shadow-slate-950/80"
+                >
+                  <div class="border-b border-slate-800/80 px-4 py-2.5 text-xs">
+                    <p class="font-semibold text-slate-100">
+                      TikTok feed – @thrifts128
+                    </p>
+                    <p class="text-[11px] text-slate-400">
+                      Embedded profile from TikTok (may take a moment to load).
+                    </p>
+                  </div>
+
+                  <!-- TikTok embedded creator feed -->
+                  <div class="bg-slate-900/80 px-2 py-3">
+                    <blockquote
+                      class="tiktok-embed"
+                      cite="https://www.tiktok.com/@thrifts128"
+                      data-unique-id="thrifts128"
+                      data-embed-from="embed_page"
+                      data-embed-type="creator"
+                      style="max-width: 780px; min-width: 288px; margin: 0 auto;"
+                    >
+                      <section>
+                        <a
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          href="https://www.tiktok.com/@thrifts128"
+                          class="text-pink-300"
+                        >
+                          @thrifts128 on TikTok
+                        </a>
+                      </section>
+                    </blockquote>
+                  </div>
+                </div>
+
+
+                <script async src="https://www.tiktok.com/embed.js"></script>
+
+                <div class="px-4 py-2.5 text-[11px] text-slate-500">
+                  If the videos don't load, tap
+                  <span class="font-medium text-pink-300">Open TikTok profile</span>
+                  above to view directly in the app.
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Delivery & Payments -->
+        <section id="delivery" class="py-10 md:py-12">
+          <div class="mx-auto max-w-6xl px-4 md:px-6">
+            <div class="grid gap-8 md:grid-cols-[1.1fr,1fr] md:items-start">
+              <div>
+                <h2 class="text-xl font-semibold tracking-tight text-slate-50">
+                  Delivery across Kenya
+                </h2>
+                <p class="mt-2 max-w-xl text-sm text-slate-300">
+                  Whether you're in Kiambu, Nairobi, Mombasa, Eldoret or any
+                  other town, we can get your thrift pieces to you.
+                </p>
+
+                <div class="mt-4 grid gap-3 text-xs text-slate-300 sm:grid-cols-2">
+                  <div
+                    class="rounded-2xl border border-slate-800/80 bg-slate-950/90 p-3"
+                  >
+                    <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                      Within Kiambu & Nairobi
+                    </p>
+                    <ul class="mt-2 space-y-1.5">
+                      <li>• Same/next-day delivery (depending on time of order).</li>
+                      <li>• Rider delivery to estate / agreed point.</li>
+                      <li>• Pay delivery fee with your order.</li>
+                    </ul>
+                  </div>
+                  <div
+                    class="rounded-2xl border border-slate-800/80 bg-slate-950/90 p-3"
+                  >
+                    <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                      Other towns in Kenya
+                    </p>
+                    <ul class="mt-2 space-y-1.5">
+                      <li>• Parcels sent via reliable courier services.</li>
+                      <li>• You pick from the nearest stage/office.</li>
+                      <li>• Delivery timelines depend on town.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <div
+                  class="space-y-3 rounded-2xl border border-pink-500/50 bg-slate-950/95 p-4 shadow-lg shadow-pink-500/30"
+                >
+                  <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-pink-200">
+                    Payments – M-Pesa Till
+                  </p>
+                  <p class="text-sm font-semibold text-slate-50">
+                    Till Number:
+                    <span class="text-pink-300">6918141</span>
+                  </p>
+                  <p class="text-xs text-slate-300">
+                    Use the steps below to pay securely for your order. Always
+                    confirm with us on WhatsApp before sending money.
+                  </p>
+                  <ol class="mt-1 list-decimal space-y-1.5 pl-4 text-xs text-slate-200">
+                    <li>Go to M-Pesa on your phone.</li>
+                    <li>Select "Lipa na M-Pesa" → "Buy Goods and Services".</li>
+                    <li>Enter Till Number: <strong>6918141</strong>.</li>
+                    <li>Enter the amount agreed for your order.</li>
+                    <li>Confirm details then enter your M-Pesa PIN.</li>
+                    <li>Share the M-Pesa message screenshot on WhatsApp.</li>
+                  </ol>
+                  <button
+                    type="button"
+                    data-copy-till
+                    class="mt-2 inline-flex items-center gap-2 rounded-full bg-pink-500 px-4 py-1.5 text-[11px] font-medium text-white shadow-md shadow-pink-500/40 hover:bg-pink-400"
+                  >
+                    Copy M-Pesa Till: 6918141
+                  </button>
+                  <p class="text-[11px] text-slate-500">
+                    For cash payments at the physical shop, confirm with Sharon
+                    on arrival.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Contact -->
+        <section
+          id="contact"
+          class="border-t border-slate-900/70 bg-slate-950/70 py-10 md:py-12"
+        >
+          <div class="mx-auto max-w-6xl px-4 md:px-6">
+            <div class="grid gap-8 md:grid-cols-[1.1fr,1fr] md:items-center">
+              <div>
+                <h2 class="text-xl font-semibold tracking-tight text-slate-50">
+                  Place your order
+                </h2>
+                <p class="mt-2 max-w-xl text-sm text-slate-300">
+                  Send a WhatsApp or call with the item you like, your size,
+                  location and preferred delivery method. Photos and videos of
+                  the pieces are always available before you pay.
+                </p>
+
+                <div class="mt-4 space-y-2 text-sm">
+                  <p>
+                    <span class="text-slate-400">Phone / WhatsApp:</span>
+                    <a
+                      href="tel:+254737233022"
+                      class="font-semibold text-pink-300 hover:text-pink-200"
+                      >+254 737 233 022</a
+                    >
+                  </p>
+                  <p class="text-xs text-slate-400">
+                    You can also use WhatsApp:
+                    <a
+                      href="https://wa.me/254737233022"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="font-medium text-pink-300 hover:text-pink-200"
+                      >wa.me/254737233022</a
+                    >
+                  </p>
+                </div>
+
+                <div class="mt-4 grid gap-3 text-xs text-slate-300 sm:grid-cols-2">
+                  <div
+                    class="rounded-2xl border border-slate-800/80 bg-slate-950/90 p-3"
+                  >
+                    <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                      Best time to order
+                    </p>
+                    <ul class="mt-2 space-y-1.5">
+                      <li>• Monday – Saturday, 9am to 7pm.</li>
+                      <li>• Sundays and holidays – limited hours.</li>
+                      <li>• For urgent orders, call directly.</li>
+                    </ul>
+                  </div>
+                  <div
+                    class="rounded-2xl border border-slate-800/80 bg-slate-950/90 p-3"
+                  >
+                    <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                      What to send on WhatsApp
+                    </p>
+                    <ul class="mt-2 space-y-1.5">
+                      <li>• Screenshot or description of the item.</li>
+                      <li>• Your size (e.g. UK 8, 10, 12...).</li>
+                      <li>• Your full name and delivery location.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <div
+                  class="space-y-3 rounded-2xl border border-slate-800/80 bg-slate-950/95 p-4 text-sm shadow-lg shadow-slate-950/80"
+                >
+                  <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-400">
+                    Quick action
+                  </p>
+                  <div class="space-y-2 text-xs text-slate-200">
+                    <button
+                      type="button"
+                      onclick="window.location.href='https://wa.me/254737233022'"
+                      class="flex w-full items-center justify-center rounded-full bg-pink-500 px-4 py-2 font-medium text-white shadow-md shadow-pink-500/40 hover:bg-pink-400"
+                    >
+                      Message Sharon on WhatsApp
+                    </button>
+                    <button
+                      type="button"
+                      onclick="window.location.href='tel:+254737233022'"
+                      class="flex w-full items-center justify-center rounded-full border border-slate-700/80 bg-slate-950/80 px-4 py-2 font-medium text-slate-100 hover:border-pink-500/70 hover:text-pink-200"
+                    >
+                      Call now: +254 737 233 022
+                    </button>
+                  </div>
+
+                  <div class="mt-2 space-y-1 text-[11px] text-slate-400">
+                    <p>
+                      Instagram and other socials coming soon. For now, TikTok
+                      and WhatsApp are the main ways to keep up with new stock.
+                    </p>
+                    <p>
+                      Website:
+                      <a
+                        href="https://sharonthriftwear.github.io/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="font-medium text-pink-300 hover:text-pink-200"
+                        >sharonthriftwear.github.io</a
+                      >
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <!-- Footer -->
+      <footer class="border-t border-slate-900/80 bg-slate-950/95 py-6">
+        <div
+          class="mx-auto flex max-w-6xl flex-col gap-3 px-4 text-[11px] text-slate-500 md:flex-row md:items-center md:justify-between md:px-6"
+        >
+          <p>
+            © <span id="year"></span> Sharon Thriftwear. All rights reserved.
           </p>
+          <div class="flex flex-wrap items-center gap-3">
+            <p>
+              Kiambu Town • Near Ola Energy • Kenya
+            </p>
+            <p>
+              TikTok:
+              <a
+                href="https://www.tiktok.com/@thrifts128"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="font-medium text-pink-300 hover:text-pink-200"
+                >@thrifts128</a
+              >
+            </p>
+            <p>
+              Phone:
+              <a
+                href="tel:+254737233022"
+                class="font-medium text-slate-300 hover:text-pink-200"
+                >+254 737 233 022</a
+              >
+            </p>
+          </div>
+        </div>
+      </footer>
+    </div>
 
-          <div class="meta-row">
-            <div>
-              <div class="meta-label">Estimated back online</div>
-              <div class="highlight">Soon – watch this space</div>
+    <!-- JavaScript for interactivity -->
+    <script>
+      // Hide preloader after full load
+      window.addEventListener("load", function () {
+        const preloader = document.getElementById("preloader");
+        if (preloader) {
+          preloader.style.transition = "opacity 0.4s ease, visibility 0.4s ease";
+          preloader.style.opacity = "0";
+          preloader.style.visibility = "hidden";
+          setTimeout(function () {
+            if (preloader && preloader.parentNode) {
+              preloader.parentNode.removeChild(preloader);
+            }
+          }, 450);
+        }
+      });
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const header = document.querySelector("header");
+        const hero = document.getElementById("hero");
+        const menuToggle = document.querySelector("[data-menu-toggle]");
+        const mobileMenu = document.querySelector("[data-mobile-menu]");
+        const filterButtons = document.querySelectorAll("[data-filter]");
+        const productCards = document.querySelectorAll("[data-category]");
+        const toast = document.querySelector("[data-toast]");
+        const yearSpan = document.getElementById("year");
+
+        if (yearSpan) {
+          yearSpan.textContent = new Date().getFullYear();
+        }
+
+        // Mobile nav toggle
+        if (menuToggle && mobileMenu) {
+          menuToggle.addEventListener("click", function () {
+            mobileMenu.classList.toggle("hidden");
+          });
+        }
+
+        // Smooth scroll for in-page anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
+          anchor.addEventListener("click", function (e) {
+            const href = this.getAttribute("href");
+            if (!href || href === "#") return;
+            const id = href.substring(1);
+            const target = document.getElementById(id);
+            if (target) {
+              e.preventDefault();
+              const headerOffset = 80;
+              const rect = target.getBoundingClientRect();
+              const offsetTop = rect.top + window.pageYOffset - headerOffset;
+              window.scrollTo({ top: offsetTop, behavior: "smooth" });
+              if (mobileMenu && !mobileMenu.classList.contains("hidden")) {
+                mobileMenu.classList.add("hidden");
+              }
+            }
+          });
+        });
+
+        // Header background change on scroll
+        function updateHeader() {
+          if (!header || !hero) return;
+          const heroHeight = hero.offsetHeight || 200;
+          if (window.scrollY > heroHeight - 100) {
+            header.classList.add("bg-slate-950/95", "backdrop-blur", "shadow-lg");
+          } else {
+            header.classList.remove("bg-slate-950/95", "backdrop-blur", "shadow-lg");
+          }
+        }
+        updateHeader();
+        window.addEventListener("scroll", updateHeader);
+
+        // Simple toast helper
+        let toastTimeout;
+        function showToast(message) {
+          if (!toast) return;
+          toast.textContent = message;
+          toast.classList.remove(
+            "opacity-0",
+            "pointer-events-none",
+            "translate-y-4"
+          );
+          clearTimeout(toastTimeout);
+          toastTimeout = setTimeout(function () {
+            toast.classList.add(
+              "opacity-0",
+              "pointer-events-none",
+              "translate-y-4"
+            );
+          }, 2500);
+        }
+
+        // Copy to clipboard buttons
+        function setupCopy(selector, text, successMessage) {
+          const el = document.querySelectorAll(selector);
+          if (!el.length) return;
+          el.forEach(function (btn) {
+            btn.addEventListener("click", function () {
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard
+                  .writeText(text)
+                  .then(function () {
+                    showToast(successMessage);
+                  })
+                  .catch(function () {
+                    showToast("Copy failed. Please copy manually.");
+                  });
+              } else {
+                // Fallback
+                const temp = document.createElement("textarea");
+                temp.value = text;
+                temp.style.position = "fixed";
+                temp.style.left = "-9999px";
+                document.body.appendChild(temp);
+                temp.select();
+                try {
+                  document.execCommand("copy");
+                  showToast(successMessage);
+                } catch (e) {
+                  showToast("Copy failed. Please copy manually.");
+                }
+                document.body.removeChild(temp);
+              }
+            });
+          });
+        }
+
+        setupCopy("[data-copy-phone]", "+254737233022", "Phone number copied");
+        setupCopy("[data-copy-till]", "6918141", "M-Pesa till number copied");
+
+        // Collection filter (highlights selected category)
+        if (filterButtons.length && productCards.length) {
+          filterButtons.forEach(function (btn) {
+            btn.addEventListener("click", function () {
+              const filter = this.getAttribute("data-filter") || "all";
+
+              filterButtons.forEach(function (b) {
+                b.classList.remove("bg-pink-500/90", "text-white", "border-pink-500/40");
+                b.classList.add("border-slate-700/80", "bg-slate-950/80", "text-slate-200");
+              });
+
+              this.classList.remove("border-slate-700/80", "bg-slate-950/80", "text-slate-200");
+              this.classList.add("bg-pink-500/90", "text-white", "border-pink-500/40");
+
+              productCards.forEach(function (card) {
+                const cat = card.getAttribute("data-category");
+                if (filter === "all" || cat === filter) {
+                  card.classList.remove("opacity-40", "scale-95");
+                } else {
+                  card.classList.add("opacity-40", "scale-95");
+                }
+              });
+            });
+          });
+        }
+      });
+    </script>
+
+    <!-- AI Chat Assistant Widget -->
+    <div id="ai-chat-assistant" class="fixed bottom-4 right-4 z-40 flex flex-col items-end gap-3 text-xs">
+      <!-- Chat panel -->
+      <div
+        data-chat-panel
+        class="hidden w-72 sm:w-80 overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-950/95 shadow-xl shadow-slate-950/80"
+      >
+        <div class="flex items-center justify-between gap-2 border-b border-slate-800/80 bg-slate-950/95 px-3 py-2.5">
+          <div>
+            <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-300">
+              Sharon AI Assistant
+            </p>
+            <p class="text-[11px] text-slate-500">Ask about location, delivery, prices & payments.</p>
+            <div class="mt-0.5 flex items-center gap-1 text-[10px] text-emerald-300">
+              <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>Online now</span>
             </div>
-            <div>
-              <span class="pill-soft">Online store temporarily closed</span>
+          </div>
+          <button
+            type="button"
+            data-chat-close
+            class="inline-flex h-7 w-7 items-center justify-center rounded-full border border-slate-700/80 bg-slate-900/80 text-slate-300 hover:border-pink-500/70 hover:text-pink-200"
+            aria-label="Close chat assistant"
+          >
+            <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="flex flex-col">
+          <div
+            data-chat-messages
+            class="max-h-72 space-y-3 overflow-y-auto px-3 py-3 text-[11px] text-slate-100"
+          >
+            <!-- Initial assistant message -->
+            <div class="flex gap-2">
+              <div
+                class="mt-0.5 h-6 w-6 overflow-hidden rounded-full border border-pink-500/60 bg-gradient-to-tr from-pink-500 via-fuchsia-500 to-indigo-500"
+              >
+                <img
+                  src="https://p16-sign-va.tiktokcdn.com/tos-maliva-avt-0068/9f846e4a136758871f1115b9fb9bc92a~tplv-tiktokx-cropcenter:100:100.jpeg?dr=14579&refresh_token=02f4483a&x-expires=1763848800&x-signature=p1U0u%2B6tkClLD6T7NYh%2BcaByyb8%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=maliva"
+                  alt="Sharon Thriftwear logo"
+                  class="h-full w-full object-cover"
+                />
+              </div>
+              <div class="flex-1 rounded-2xl bg-slate-900/80 px-3 py-2">
+                <p class="text-[11px] font-semibold text-pink-200">Sharon AI</p>
+                <p class="mt-1 text-[11px] text-slate-100">
+                  Hi! I'm Sharon's assistant. Ask me about our location in Kiambu, delivery anywhere in Kenya,
+                  what we stock (crop tops, dresses, skirts), price ranges, or how to pay via M-Pesa till
+                  <span class="font-semibold text-pink-200">6918141</span>.
+                </p>
+                <p class="mt-1 text-[10px] text-slate-400">
+                  Example questions: "Where are you located?", "Do you deliver to Mombasa?",
+                  "How do I pay?", "What items do you have?".
+                </p>
+              </div>
             </div>
           </div>
 
-          <form class="form" action="#" method="post">
+          <form
+            data-chat-form
+            class="flex items-center gap-2 border-t border-slate-800/80 bg-slate-950/95 px-3 py-2.5 text-[11px]"
+          >
             <input
-              type="email"
-              name="email"
-              placeholder="Get an email when we’re back (optional)"
-              aria-label="Email address"
+              type="text"
+              data-chat-input
+              class="h-8 flex-1 rounded-full border border-slate-700/80 bg-slate-950/90 px-3 text-[11px] text-slate-100 placeholder-slate-500 focus:border-pink-500/70 focus:outline-none"
+              placeholder="Ask a question about Sharon Thriftwear..."
+              autocomplete="off"
             />
-            <button type="submit" class="btn">
-              Notify me
+            <button
+              type="submit"
+              class="inline-flex h-8 items-center justify-center rounded-full bg-pink-500 px-3 text-[11px] font-semibold text-white shadow-md shadow-pink-500/40 hover:bg-pink-400"
+            >
+              Send
             </button>
           </form>
-
-          <p class="helper-text">
-            Need help or want to shop via DM?
-            <span>Instagram: @sharonthriftwear</span> ·
-            Email: hello@sharonthriftwear.com
-          </p>
-        </div>
-      </article>
-    </section>
-
-    <section class="visual" aria-hidden="true">
-      <div class="mannequin-card">
-        <div class="tag-top">
-          <span>Curated edit</span>
-          <span>AW Collection</span>
-        </div>
-
-        <div class="hanger">
-          <div class="hanger-neck"></div>
-          <div class="hanger-bar"></div>
-
-          <div class="hanger-inner">
-            <div class="hanger-label">Sharon thriftwear</div>
-            <div class="hanger-title">New drops. Same timeless taste.</div>
-            <div class="hanger-meta">
-              Reworked, pre-loved and vintage finds
-              <span>relaunching soon.</span>
-            </div>
-
-            <div class="hanger-badge">Under refresh</div>
-          </div>
-        </div>
-
-        <div class="foot-strip">
-          <span>Handpicked pieces · Slow fashion</span>
-          <span>Since 2019</span>
-        </div>
-
-        <div class="badge-circle">
-          <span>Conscious wardrobe in progress</span>
         </div>
       </div>
-    </section>
-  </main>
-</body>
+
+      <!-- Chat toggle button -->
+      <button
+        type="button"
+        data-chat-toggle
+        class="inline-flex items-center gap-2 rounded-full bg-pink-500 px-3 py-2 font-semibold text-white shadow-lg shadow-pink-500/40 hover:bg-pink-400"
+        aria-label="Open chat assistant"
+      >
+        <span class="relative flex h-7 w-7 items-center justify-center">
+          <span class="absolute inset-0 rounded-full bg-emerald-400/60 animate-ping"></span>
+          <span
+            class="relative flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-tr from-pink-500 via-fuchsia-500 to-indigo-500"
+          >
+            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M7 10.5H17M7 7.5H13M6 18L4 20V6.8C4 5.11984 4 4.27976 4.32698 3.63803C4.6146 3.07354 5.07354 2.6146 5.63803 2.32698C6.27976 2 7.11984 2 8.8 2H15.2C16.8802 2 17.7202 2 18.362 2.32698C18.9265 2.6146 19.3854 3.07354 19.673 3.63803C20 4.27976 20 5.11984 20 6.8V11.2C20 12.8802 20 13.7202 19.673 14.362C19.3854 14.9265 18.9265 15.3854 18.362 15.673C17.7202 16 16.8802 16 15.2 16H9.5C8.43726 16 7.90589 16 7.43696 16.109C6.23932 16.3822 5.27793 17.0933 5 18Z"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </span>
+          <span class="absolute -bottom-0.5 -right-0.5 h-2 w-2 rounded-full bg-emerald-400 border border-slate-950"></span>
+        </span>
+        <span class="hidden sm:flex items-center gap-1">
+          <span>Chat with Sharon AI</span>
+          <span class="flex items-center gap-1 text-[10px] font-normal">
+            <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="text-emerald-200">Online</span>
+          </span>
+        </span>
+      </button>
+    </div>
+
+    <script>
+      // Local, rule-based Sharon AI assistant (no external API calls)
+      document.addEventListener("DOMContentLoaded", function () {
+        const chatToggle = document.querySelector("[data-chat-toggle]");
+        const chatPanel = document.querySelector("[data-chat-panel]");
+        const chatClose = document.querySelector("[data-chat-close]");
+        const chatForm = document.querySelector("[data-chat-form]");
+        const chatInput = document.querySelector("[data-chat-input]");
+        const chatMessages = document.querySelector("[data-chat-messages]");
+
+        if (!chatToggle || !chatPanel || !chatForm || !chatInput || !chatMessages) return;
+
+        function toggleChat(open) {
+          const shouldOpen =
+            typeof open === "boolean" ? open : chatPanel.classList.contains("hidden");
+          if (shouldOpen) {
+            chatPanel.classList.remove("hidden");
+            chatInput.focus();
+          } else {
+            chatPanel.classList.add("hidden");
+          }
+        }
+
+        chatToggle.addEventListener("click", function () {
+          toggleChat(true);
+        });
+
+        if (chatClose) {
+          chatClose.addEventListener("click", function () {
+            toggleChat(false);
+          });
+        }
+
+        function appendMessage(role, text) {
+          const wrapper = document.createElement("div");
+          wrapper.className = role === "user" ? "flex justify-end" : "flex gap-2";
+
+          if (role === "user") {
+            const bubble = document.createElement("div");
+            bubble.className =
+              "max-w-[85%] rounded-2xl bg-pink-500 px-3 py-2 text-[11px] text-white shadow-md shadow-pink-500/40";
+            bubble.textContent = text;
+            wrapper.appendChild(bubble);
+          } else {
+            const avatar = document.createElement("div");
+            avatar.className =
+              "mt-0.5 h-6 w-6 overflow-hidden rounded-full border border-pink-500/60 bg-gradient-to-tr from-pink-500 via-fuchsia-500 to-indigo-500";
+            const img = document.createElement("img");
+            img.src =
+              "https://p16-sign-va.tiktokcdn.com/tos-maliva-avt-0068/9f846e4a136758871f1115b9fb9bc92a~tplv-tiktokx-cropcenter:100:100.jpeg?dr=14579&refresh_token=02f4483a&x-expires=1763848800&x-signature=p1U0u%2B6tkClLD6T7NYh%2BcaByyb8%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=maliva";
+            img.alt = "Sharon Thriftwear logo";
+            img.className = "h-full w-full object-cover";
+            avatar.appendChild(img);
+
+            const bubble = document.createElement("div");
+            bubble.className =
+              "max-w-[85%] rounded-2xl bg-slate-900/80 px-3 py-2 text-[11px] text-slate-100";
+            bubble.textContent = text;
+
+            wrapper.appendChild(avatar);
+            wrapper.appendChild(bubble);
+          }
+
+          chatMessages.appendChild(wrapper);
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function showTyping() {
+          const existing = chatMessages.querySelector('[data-typing="true"]');
+          if (existing) return;
+
+          const wrapper = document.createElement("div");
+          wrapper.className = "flex gap-2";
+          wrapper.setAttribute("data-typing", "true");
+
+          const avatar = document.createElement("div");
+          avatar.className =
+            "mt-0.5 h-6 w-6 overflow-hidden rounded-full border border-pink-500/60 bg-gradient-to-tr from-pink-500 via-fuchsia-500 to-indigo-500";
+          const img = document.createElement("img");
+          img.src =
+            "https://p16-sign-va.tiktokcdn.com/tos-maliva-avt-0068/9f846e4a136758871f1115b9fb9bc92a~tplv-tiktokx-cropcenter:100:100.jpeg?dr=14579&refresh_token=02f4483a&x-expires=1763848800&x-signature=p1U0u%2B6tkClLD6T7NYh%2BcaByyb8%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=maliva";
+          img.alt = "Sharon Thriftwear logo";
+          img.className = "h-full w-full object-cover";
+          avatar.appendChild(img);
+
+          const bubble = document.createElement("div");
+          bubble.className =
+            "max-w-[85%] rounded-2xl bg-slate-900/80 px-3 py-2 text-[11px] text-slate-400 italic";
+          bubble.textContent = "Sharon AI is typing...";
+
+          wrapper.appendChild(avatar);
+          wrapper.appendChild(bubble);
+
+          chatMessages.appendChild(wrapper);
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function hideTyping() {
+          const typingEl = chatMessages.querySelector('[data-typing="true"]');
+          if (typingEl) typingEl.remove();
+        }
+
+        // Simple rule-based reply generator using website info only
+        async function generateReply(message) {
+          const text = message.toLowerCase();
+          const parts = [];
+
+          const mentions = (...words) => words.some((w) => text.includes(w));
+
+          // Location & directions
+          if (
+            mentions("where are you", "where r you", "location", "locate", "directions", "direction", "ola", "kiambu", "shop")
+          ) {
+            parts.push(
+              "Sharon Thriftwear is in Kiambu Town, Kiambu County, Kenya, close to Ola Energy Kiambu. " +
+                "Use Ola Energy as your main landmark, then call or WhatsApp Sharon on +254 737 233 022 for exact directions to the shop."
+            );
+          }
+
+          // Delivery & shipping
+          if (mentions("deliver", "delivery", "ship", "shipping", "send", "parcel", "courier")) {
+            parts.push(
+              "We deliver countrywide in Kenya. Within Kiambu and Nairobi we usually do same-day or next-day delivery via rider depending on the time you order. " +
+                "For other towns, we send parcels using reliable courier services to the nearest stage or office. Delivery timelines depend on how far your town is."
+            );
+          }
+
+          // Payments / M-Pesa
+          if (mentions("mpesa", "m-pesa", "pay", "payment", "payments", "till", "buy goods", "lipa na")) {
+            parts.push(
+              "You can pay via M-Pesa using Lipa na M-Pesa, then Buy Goods and Services, to Till Number 6918141. Steps:\n" +
+                "1. Go to M-Pesa on your phone.\n" +
+                "2. Choose Lipa na M-Pesa, then Buy Goods and Services.\n" +
+                "3. Enter Till Number 6918141.\n" +
+                "4. Enter the amount agreed for your order.\n" +
+                "5. Confirm details, then enter your M-Pesa PIN.\n" +
+                "6. Share the M-Pesa message screenshot with Sharon on WhatsApp."
+            );
+          }
+
+          // What they stock / products
+          if (
+            mentions(
+              "what do you sell",
+              "what you sell",
+              "stock",
+              "items",
+              "products",
+              "clothes",
+              "dresses",
+              "skirts",
+              "tops",
+              "crop"
+            )
+          ) {
+            parts.push(
+              "Sharon Thriftwear focuses on curated women's thrift pieces: crop tops, maxi dresses, short dresses, maxi skirts and mini skirts. " +
+                "Pieces are handpicked, steamed and checked so you get good quality at thrift prices. Stock changes with every thrift haul, so for the latest options it is best to check TikTok (@thrifts128) or WhatsApp Sharon with your size, budget and style."
+            );
+          }
+
+          // Prices / budget
+          if (mentions("price", "cost", "how much", "range", "budget", "ksh", "kes")) {
+            parts.push(
+              "Typical price ranges right now (these can change with different hauls):\n" +
+                "- Crop tops: about KES 100 to 300.\n" +
+                "- Maxi dresses: about KES 800 to 1,300.\n" +
+                "- Short dresses: about KES 800 to 900.\n" +
+                "- Maxi skirts: about KES 300 to 400.\n" +
+                "- Mini skirts: about KES 200 to 400.\n" +
+                "- Dress sets (two-piece outfits): about KES 800 to 1,200.\n" +
+                "For exact prices, send Sharon a screenshot or description of the piece you like and she will confirm."
+            );
+          }
+
+          // TikTok / socials
+          if (mentions("tiktok", "tik tok", "video", "videos", "account", "handle")) {
+            parts.push(
+              "You can see try-ons, styling tips and new stock on TikTok: @thrifts128 – https://www.tiktok.com/@thrifts128. " +
+                "If the embedded videos on this site do not load properly, open the TikTok app or website and search for @thrifts128."
+            );
+          }
+
+          // Contact / WhatsApp / phone
+          if (mentions("contact", "phone", "whatsapp", "call", "number", "reach you")) {
+            parts.push(
+              "You can contact Sharon via phone or WhatsApp on +254 737 233 022. " +
+                "For fast help, send a WhatsApp with a screenshot or description of the item, your size, your town and your preferred delivery method."
+            );
+          }
+
+          // Opening hours / when open
+          if (mentions("open", "opening", "hours", "time", "what time", "when are you")) {
+            parts.push(
+              "Typical hours are Monday to Saturday, 9 am to 7 pm. Sundays and public holidays have limited hours. " +
+                "If you are not sure, just WhatsApp or call to confirm if Sharon is available."
+            );
+          }
+
+          // Website
+          if (mentions("website", "site", "link")) {
+            parts.push(
+              "This is the official website for Sharon Thriftwear: https://sharonthriftwear.github.io/."
+            );
+          }
+
+          let reply;
+
+          if (parts.length) {
+            reply = parts.join("\n\n");
+            reply +=
+              "\n\nIf you need help choosing pieces or confirming what is in stock today, WhatsApp Sharon on +254 737 233 022 and she will assist you personally.";
+          } else {
+            reply =
+              "Thanks for your message! I'm Sharon's assistant and I use the information on this website to help with common questions about location, delivery, prices, what we stock and how to pay. " +
+              "For specific items, sizes or live photos or videos, please WhatsApp Sharon directly on +254 737 233 022.";
+          }
+
+          return reply;
+        }
+
+        chatForm.addEventListener("submit", async function (e) {
+          e.preventDefault();
+          const value = chatInput.value.trim();
+          if (!value) return;
+
+          appendMessage("user", value);
+          chatInput.value = "";
+
+          showTyping();
+          // Small delay to make the typing indicator feel natural
+          setTimeout(async function () {
+            const reply = await generateReply(value);
+            hideTyping();
+            appendMessage("assistant", reply);
+          }, 500);
+        });
+      });
+    </script>
+  </body>
 </html>
