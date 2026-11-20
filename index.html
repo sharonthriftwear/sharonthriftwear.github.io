@@ -41,6 +41,54 @@
     <symbol id="i-whatsapp" viewBox="0 0 24 24"><path d="M20.9 3.1A12 12 0 0 0 2.1 17.6L.5 23.5l6-1.6A12 12 0 0 0 24 11.4c0-3.2-1.1-6.1-3.1-8.3ZM12 21.4c-1.7 0-3.4-.5-4.9-1.4l-.4-.2-3.5 1 .9-3.5-.2-.4a9.8 9.8 0 1 1 8.1 4.5Zm5.5-7.3c-.3-.1-1.7-.8-2-1-.3-.1-.5-.1-.7.2l-.9 1c-.2.2-.4.2-.7.1a8 8 0 0 1-2.4-1.5 8.9 8.9 0 0 1-1.6-2c-.2-.3 0-.4.1-.6l.4-.5.3-.5c.1-.2 0-.4 0-.5L9.2 6.5c-.2-.5-.5-.5-.7-.5H8c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.3s1 2.7 1.2 2.9c.1.2 2 3.2 5 4.5l1.6.6c.7.2 1.3.2 1.8.1.6-.1 1.7-.7 1.9-1.3.3-.6.3-1.2.2-1.3l-.5-.1Z" fill="currentColor" stroke="none"/></symbol>
   </svg>
 
+  <div class="brand-preloader" id="brand-preloader" aria-hidden="true" hidden>
+    <div class="preloader-content">
+      <div class="preloader-emblem"><svg class="icon"><use href="#i-sparkle"/></svg></div>
+      <div class="wordmark preloader-wordmark">
+        <span class="wordmark-main">SHARON</span>
+        <span class="wordmark-sub">THRIFTWEAR</span>
+      </div>
+      <p class="preloader-tagline">Good style deserves a second life.</p>
+      <div class="preloader-meter"></div>
+      <p class="eyebrow preloader-label">Loading the collection</p>
+    </div>
+    <p class="eyebrow preloader-location">Kiambu, Kenya</p>
+  </div>
+  <script>
+    // Run before the storefront paints, without waiting for third-party photos.
+    (() => {
+      const loader = document.getElementById('brand-preloader');
+      const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      if (motion.matches) return;
+
+      const startedAt = performance.now();
+      const events = new AbortController();
+      const { signal } = events;
+      let fadeTimer;
+      const deadline = window.setTimeout(dismiss, 1700);
+
+      function dismiss() {
+        loader.hidden = true;
+        window.clearTimeout(deadline);
+        window.clearTimeout(fadeTimer);
+        events.abort();
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        const remaining = Math.max(0, 650 - (performance.now() - startedAt));
+        fadeTimer = window.setTimeout(() => loader.classList.add('is-leaving'), remaining);
+      }, { once: true, signal });
+      loader.addEventListener('transitionend', (event) => {
+        if (event.target === loader && event.propertyName === 'opacity') dismiss();
+      }, { signal });
+      loader.addEventListener('click', dismiss, { signal });
+      document.addEventListener('keydown', dismiss, { capture: true, signal });
+      window.addEventListener('pagehide', dismiss, { signal });
+      motion.addEventListener('change', (event) => { if (event.matches) dismiss(); }, { signal });
+      loader.hidden = false;
+    })();
+  </script>
+
   <header class="site-header" id="top">
     <div class="utility">
       <div class="container utility-inner">
