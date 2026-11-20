@@ -77,5 +77,12 @@ test('WhatsApp requests include the selected styles, quantities and delivery det
   assert.match(order, /Preferred size: UK 10/);
   assert.match(order, /Courier delivery within Kenya/);
   assert.match(order, /Nyeri & environs/);
-  assert.doesNotMatch(buildOrderMessage(items, { delivery: 'pickup', area: 'Do not include' }), /delivery area/);
+  assert.doesNotMatch(order, /Pickup address:/);
+});
+
+test('pickup requests include the shop address instead of a delivery area', () => {
+  const order = buildOrderMessage(bagItems({ 'sunday-floral': 1 }), { delivery: 'pickup', area: 'Do not include' });
+  assert.match(order, /Delivery method: Pickup in Kiambu Town/);
+  assert.match(order, /^Pickup address: Kiambu Town, opposite Rumathi Building$/m);
+  assert.doesNotMatch(order, /delivery area|Do not include/);
 });

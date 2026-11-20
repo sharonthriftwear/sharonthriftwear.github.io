@@ -367,6 +367,7 @@ function renderBag(items) {
 function syncOrderArea() {
   const method = $('#order-delivery').value;
   const needsArea = Boolean(method) && method !== 'pickup';
+  $('#order-pickup-note').hidden = method !== 'pickup';
   const area = $('#order-area');
   $('#order-area-field').hidden = !needsArea;
   area.required = needsArea;
@@ -390,6 +391,7 @@ function renderCheckout(items) {
       <label class="checkout-field" for="order-name">Your name<input id="order-name" autocomplete="name" required maxlength="70" placeholder="Full name"></label>
       <label class="checkout-field" for="order-size"><span>Preferred size <span>(optional)</span></span><input id="order-size" maxlength="35" placeholder="e.g. UK 10"></label>
       <label class="checkout-field" for="order-delivery">Delivery or pickup<select id="order-delivery" required><option value="" selected disabled>Choose an option</option>${Object.entries(DELIVERY).map(([key, label]) => `<option value="${key}">${escape(label)}</option>`).join('')}</select></label>
+      <p class="drawer-hint" id="order-pickup-note" hidden>Pickup address: ${escape(SHOP.pickupAddress)}.</p>
       <label class="checkout-field" id="order-area-field" for="order-area" hidden>Town / delivery area<input id="order-area" maxlength="80" placeholder="e.g. Nairobi, Westlands"></label>
     </form>`;
   drawerFooter.innerHTML = `${subtotalMarkup(items)}<p class="drawer-hint">No payment is taken here. Confirm your final total and delivery fee with Sharon before paying.</p>
