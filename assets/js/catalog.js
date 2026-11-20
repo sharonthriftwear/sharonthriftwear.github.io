@@ -2,6 +2,7 @@
 export const SHOP = {
   whatsApp: 'https://wa.me/254737233022',
   till: '6918141',
+  pickupAddress: 'Kiambu Town, opposite Rumathi Building',
 };
 
 export const CATEGORIES = {
@@ -247,6 +248,7 @@ export function buildOrderMessage(items, { name = '', size = '', delivery, area 
     ...(name.trim() ? [`Name: ${name.trim()}`] : []),
     ...(size.trim() ? [`Preferred size: ${size.trim()}`] : []),
     ...(Object.hasOwn(DELIVERY, delivery) ? [`Delivery method: ${DELIVERY[delivery]}`] : []),
+    ...(delivery === 'pickup' ? [`Pickup address: ${SHOP.pickupAddress}`] : []),
     ...(delivery !== 'pickup' && area.trim() ? [`Town / delivery area: ${area.trim()}`] : []),
     '',
     'Please confirm the available pieces, sizes and final total before I pay. Thank you!',
