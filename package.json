@@ -1,0 +1,6 @@
+{
+  "name": "sharon-thriftwear-storefront",
+  "private": true,
+  "type": "module",
+  "scripts": { "test": "node --test" }
+}
