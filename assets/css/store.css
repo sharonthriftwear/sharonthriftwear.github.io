@@ -139,6 +139,44 @@ a, button, input, select { touch-action: manipulation; }
 .underlined-link { display: inline-flex; align-items: center; gap: 4px; color: var(--accent-strong); font-weight: 650; text-decoration: underline; text-underline-offset: 4px; }
 .underlined-link .icon { width: 16px; height: 16px; }
 
+/* Branded storefront preloader */
+.brand-preloader {
+  --frame-inset: clamp(13px, 2.2vw, 31px);
+  position: fixed;
+  z-index: 20;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: radial-gradient(ellipse at 50% 42%, #fffaf2 4%, #f5ecdd 64%, #eadcc6 100%);
+  color: var(--ink);
+  text-align: center;
+  touch-action: manipulation;
+  transition: opacity .28s ease;
+}
+.brand-preloader::before {
+  position: absolute;
+  inset: var(--frame-inset);
+  border: 1px solid #a68b5f56;
+  pointer-events: none;
+  content: '';
+}
+.brand-preloader.is-leaving { opacity: 0; pointer-events: none; }
+.preloader-content { display: grid; justify-items: center; animation: preloader-reveal .46s cubic-bezier(.2, .65, .3, 1) both; }
+.preloader-emblem { display: flex; align-items: center; gap: 10px; margin-bottom: clamp(11px, 2.5vh, 20px); color: var(--accent); }
+.preloader-emblem .icon { width: 25px; height: 25px; stroke-width: 1.25; }
+.preloader-emblem::before, .preloader-emblem::after { width: 25px; height: 1px; background: #b3986c8c; content: ''; }
+.preloader-wordmark .wordmark-main { font-size: clamp(38px, 13.5vw, 96px); letter-spacing: .16em; }
+.preloader-wordmark .wordmark-sub { margin-top: clamp(7px, 1.5vh, 13px); padding-left: .44em; font-size: clamp(9px, 1.85vw, 12px); letter-spacing: .44em; }
+.preloader-tagline { margin-top: clamp(13px, 3vh, 24px); color: var(--accent-strong); font: italic 600 clamp(19px, 3vw, 27px)/1.15 var(--serif); text-wrap: balance; }
+.preloader-meter { width: clamp(84px, 22vw, 132px); height: 2px; margin-top: clamp(14px, 3vh, 22px); overflow: hidden; border-radius: 2px; background: #d9c9ae; }
+.preloader-meter::after { display: block; width: 48%; height: 100%; background: linear-gradient(90deg, #b59a6b, var(--accent), #b59a6b); content: ''; animation: preloader-sweep .95s ease-in-out infinite; }
+.preloader-label { margin-top: 8px; font-size: 9px; }
+.preloader-location { position: absolute; right: var(--frame-inset); bottom: calc(var(--frame-inset) + 16px); left: var(--frame-inset); color: var(--muted); }
+@keyframes preloader-reveal { from { opacity: .25; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes preloader-sweep { from { transform: translateX(-100%); } to { transform: translateX(210%); } }
+@media (max-height: 425px) { .preloader-location { display: none; } }
+
 /* Masthead and shop navigation */
 .site-header { background: var(--header); }
 .utility { background: var(--utility); }
@@ -595,5 +633,6 @@ a, button, input, select { touch-action: manipulation; }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .brand-preloader { display: none; }
   *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition: none !important; }
 }
