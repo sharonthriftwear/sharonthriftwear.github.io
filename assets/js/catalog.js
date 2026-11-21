@@ -32,6 +32,10 @@ export const PRODUCTS = [
     image: './assets/images/2b7e7777-7ea4-4108-a540-9b87f6e7a39e.jpeg',
     alt: 'Beige zip-front top and wide-leg trousers shown from the front, side and back',
     description: 'A fitted zip-front top and matching wide-leg trousers in warm beige.',
+    views: [
+      { label: 'Side', image: './assets/images/preview/beige-zip-side.webp', alt: 'Side view of the beige zip-front top and wide-leg trousers' },
+      { label: 'Back', image: './assets/images/preview/beige-zip-back.webp', alt: 'Back view of the fitted beige top and wide-leg trousers' },
+    ],
   },
   {
     id: 'black-sash-mini', name: 'Black Side-Sash Mini Dress', category: 'short-dresses', price: 800, isNew: true,
@@ -50,6 +54,10 @@ export const PRODUCTS = [
     image: './assets/images/bef652e0-fd7f-4adb-bca7-e84ce56bc0c8.jpeg',
     alt: 'Front and back views of a white short-sleeve crop top with a low open back',
     description: 'A fitted white crop top with short sleeves and a low open back.',
+    views: [
+      { label: 'Front', image: './assets/images/preview/open-back-crop-front.webp', alt: 'Front view of the fitted white short-sleeve crop top' },
+      { label: 'Back', image: './assets/images/preview/open-back-crop-back.webp', alt: 'Back view showing the low open back of the white crop top' },
+    ],
   },
   {
     id: 'black-high-rise-flares', name: 'Black High-Rise Flares', category: 'trousers', price: 800,
@@ -68,6 +76,10 @@ export const PRODUCTS = [
     image: './assets/images/1e394cc9-c5ff-4763-9e6e-6fde9c717dd9.jpeg',
     alt: 'Grey zip-front top and wide-leg trousers shown from the front, side and back',
     description: 'A fitted zip-front top and matching wide-leg trousers in grey.',
+    views: [
+      { label: 'Side', image: './assets/images/preview/grey-zip-side.webp', alt: 'Side view of the grey zip-front top and wide-leg trousers' },
+      { label: 'Back', image: './assets/images/preview/grey-zip-back.webp', alt: 'Back view of the fitted grey top and wide-leg trousers' },
+    ],
   },
   {
     id: 'white-ruched-halter-mini', name: 'White Ruched Halter Mini', category: 'short-dresses', price: 900,
@@ -170,6 +182,10 @@ export const PRODUCTS = [
     image: './assets/images/17e94450-7b7a-4426-abc9-0dfcc2a401b1.jpeg',
     alt: 'Light blue high-waisted flared trousers shown from the front and back',
     description: 'Light blue trousers with a wide high-rise waistband, fitted thighs and flared hems.',
+    views: [
+      { label: 'Front', image: './assets/images/preview/blue-flares-front.webp', alt: 'Front view showing the blue flares and wide high-rise waistband' },
+      { label: 'Rear angle', image: './assets/images/preview/blue-flares-back.webp', alt: 'Rear three-quarter view of the blue flared trousers' },
+    ],
   },
   {
     id: 'square-neck-tee', name: 'Square-Neck Tee', category: 'tops', price: 250,
@@ -212,12 +228,20 @@ export const PRODUCTS = [
     image: './assets/images/99056687-0d27-4463-addf-f60e596a3136.jpeg',
     alt: 'Black pointed-hem zip-front top and wide-leg trousers shown from the front, side and back',
     description: 'A fitted black top with a contrast zip and pointed hem, paired with wide-leg trousers.',
+    views: [
+      { label: 'Side', image: './assets/images/preview/black-zip-side.webp', alt: 'Side view of the black zip-front top and wide-leg trousers' },
+      { label: 'Back', image: './assets/images/preview/black-zip-back.webp', alt: 'Back view of the fitted black top and wide-leg trousers' },
+    ],
   },
   {
     id: 'black-zip-flare-set', name: 'Black High-Neck Zip & Flare Set', category: 'co-ords', price: 1400,
     image: './assets/images/7ec7db98-06c4-4f96-b422-315a5a0a5db4.jpeg',
     alt: 'Black high-neck zip jacket with matching flared trousers, shown from several angles',
     description: 'A black high-neck top with a tonal zip, paired with flared trousers.',
+    views: [
+      { label: 'Front', image: './assets/images/preview/black-zip-flare-front.webp', alt: 'Front view of the black high-neck zip top and flared trousers' },
+      { label: 'Side', image: './assets/images/preview/black-zip-flare-side.webp', alt: 'Side view of the black high-neck top and flared trousers' },
+    ],
   },
 ];
 

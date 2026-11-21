@@ -4,6 +4,7 @@ import {
   filterProducts, getPage, readCatalogState, cleanBag, cleanWishlist, bagItems,
   bagTotal, buildOrderMessage,
 } from './catalog.js';
+import { setupPhotoPreview } from './photo-preview.js';
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -43,6 +44,7 @@ const drawerTitle = $('#drawer-title');
 const drawerBody = $('#drawer-body');
 const drawerFooter = $('#drawer-footer');
 const productDialog = $('#product-dialog');
+const openPhotoPreview = setupPhotoPreview($('#photo-preview-dialog'));
 const filterDialog = $('#filter-dialog');
 const menuDialog = $('#menu-dialog');
 const deliveryDialog = $('#delivery-dialog');
@@ -308,7 +310,12 @@ function showDialog(dialog) {
 function openProduct(product) {
   const category = CATEGORIES[product.category].label;
   const link = whatsappLink(`Hi Sharon! Is the ${product.name} (${formatMoney(product.price)}) available? Could you confirm the size and condition?`);
-  $('#product-detail').innerHTML = `<div class="detail-media">${image(product)}</div>
+  $('#product-detail').innerHTML = `<div class="detail-media">
+      ${image(product)}
+      <button class="button detail-preview-launch" type="button" data-action="preview" data-id="${product.id}" aria-haspopup="dialog" aria-controls="photo-preview-dialog">
+        ${icon('photo-cube')} Interactive preview${product.views?.length ? ' <span class="preview-tag">More angles</span>' : ''}
+      </button>
+    </div>
     <div class="detail-copy">
       <p class="eyebrow">${escape(category)}</p>
       <h2 id="product-dialog-title">${escape(product.name)}</h2>
@@ -584,6 +591,7 @@ document.addEventListener('click', (event) => {
   const product = dataset.id ? findProduct(dataset.id) : null;
   switch (dataset.action) {
     case 'detail': if (product) openProduct(product); break;
+    case 'preview': if (product) openPhotoPreview(product, control); break;
     case 'save': if (product) updateWishlist(product); break;
     case 'remove-saved': if (product) updateWishlist(product, true); break;
     case 'add':
