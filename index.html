@@ -34,6 +34,7 @@
     <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
     <symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14M12 5v14"/></symbol>
     <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+    <symbol id="i-photo-cube" viewBox="0 0 24 24"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3ZM4 7.5l8 4.5 8-4.5M12 12v9"/></symbol>
     <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M3 6h6m4 0h8M3 12h12m4 0h2M3 18h3m4 0h11"/><circle cx="11" cy="6" r="2"/><circle cx="17" cy="12" r="2"/><circle cx="8" cy="18" r="2"/></symbol>
     <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4.5 4.5L19 7"/></symbol>
     <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></symbol>
@@ -343,6 +344,26 @@
     <div class="product-dialog-shell">
       <button class="icon-control close-dialog product-close" type="button" data-close aria-label="Close product details" autofocus><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
       <div id="product-detail" class="product-detail"><h2 id="product-dialog-title" class="sr-only">Style details</h2></div>
+    </div>
+  </dialog>
+
+  <dialog class="dialog photo-preview-dialog" id="photo-preview-dialog" aria-labelledby="preview-title">
+    <header class="dialog-header preview-header">
+      <div><p class="eyebrow">Interactive photo preview</p><h2 id="preview-title">Style preview</h2></div>
+      <button class="icon-control close-dialog" type="button" data-close aria-label="Close photo preview" autofocus><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+    </header>
+    <div class="preview-content">
+      <div class="preview-stage" id="preview-stage" tabindex="0" role="group" aria-label="Photo viewer" aria-describedby="preview-instructions"></div>
+      <div class="preview-controls">
+        <div class="preview-angles" id="preview-angles" role="group" aria-label="Photo angles" hidden></div>
+        <div class="preview-zoom" role="group" aria-label="Magnification">
+          <button class="icon-control" type="button" data-preview-zoom="-1" aria-label="Zoom out" aria-disabled="true"><svg class="icon" aria-hidden="true"><use href="#i-minus"/></svg></button>
+          <output id="preview-zoom-level" aria-label="Zoom level">100%</output>
+          <button class="icon-control" type="button" data-preview-zoom="1" aria-label="Zoom in" aria-disabled="true"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></button>
+          <button class="button button-outline preview-reset" type="button" data-preview-reset>Reset</button>
+        </div>
+      </div>
+      <p class="preview-instructions" id="preview-instructions">Use the zoom controls to see details.</p>
     </div>
   </dialog>
 
