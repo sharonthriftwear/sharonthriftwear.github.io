@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Shop preloved dresses, crop tops, skirts and co-ords at Sharon Thriftwear in Kiambu Town, opposite Rumathi Building. Delivery across Kenya.">
+  <meta name="description" content="Shop preloved dresses, tops, trousers and co-ords at Sharon Thriftwear in Kiambu Town, opposite Rumathi Building. Delivery across Kenya.">
   <meta name="theme-color" content="#f2ece0">
   <title>Shop the Collection | Sharon Thriftwear</title>
   <link rel="icon" href="./assets/images/favicon.svg" type="image/svg+xml">
@@ -55,7 +55,7 @@
     <p class="eyebrow preloader-location">Kiambu, Kenya</p>
   </div>
   <script>
-    // Run before the storefront paints, without waiting for third-party photos.
+    // Run before the storefront paints, without waiting for catalog photos.
     (() => {
       const loader = document.getElementById('brand-preloader');
       const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -132,8 +132,8 @@
         <a href="./#collection" data-category="all" aria-current="true">Shop all</a>
         <a href="?category=new#collection" data-category="new"><span class="nav-wide">New arrivals</span><span class="nav-short">New in</span></a>
         <a href="?category=dresses#collection" data-category="dresses">Dresses</a>
-        <a href="?category=crop-tops#collection" data-category="crop-tops">Tops</a>
-        <a href="?category=skirts#collection" data-category="skirts">Skirts</a>
+        <a href="?category=tops#collection" data-category="tops">Tops</a>
+        <a href="?category=trousers#collection" data-category="trousers">Trousers</a>
         <a href="?category=co-ords#collection" data-category="co-ords">Co-ords</a>
         <a href="#about" class="story-nav">Our story</a>
       </div>
@@ -176,11 +176,11 @@
                 <div class="price-slider" id="price-slider">
                   <span class="price-track" aria-hidden="true"></span>
                   <label class="sr-only" for="price-low">Minimum price in Kenyan shillings</label>
-                  <input type="range" id="price-low" min="100" max="1300" value="100" step="50">
+                  <input type="range" id="price-low" min="200" max="1400" value="200" step="50">
                   <label class="sr-only" for="price-high">Maximum price in Kenyan shillings</label>
-                  <input type="range" id="price-high" min="100" max="1300" value="1300" step="50">
+                  <input type="range" id="price-high" min="200" max="1400" value="1400" step="50">
                 </div>
-                <div class="price-values"><span id="price-low-value">KSh 100</span><span aria-hidden="true" class="price-dash"></span><span id="price-high-value">KSh 1,300</span></div>
+                <div class="price-values"><span id="price-low-value">KSh 200</span><span aria-hidden="true" class="price-dash"></span><span id="price-high-value">KSh 1,400</span></div>
                 <button type="submit" class="button button-outline filter-apply">Apply filter</button>
               </fieldset>
             </form>
@@ -221,7 +221,7 @@
           <div class="products" id="products"></div>
           <noscript><p class="no-script">Enable JavaScript to browse the catalog, or <a href="https://wa.me/254737233022">message Sharon on WhatsApp</a> to see current styles.</p></noscript>
           <nav id="pagination" class="pagination" aria-label="Catalog pages" hidden></nav>
-          <p class="catalog-note" id="catalog-note" hidden>Photos show example styles. Confirm available pieces, sizes and prices with Sharon before ordering.</p>
+          <p class="catalog-note" id="catalog-note" hidden>Confirm availability and sizing with Sharon on WhatsApp before ordering. Listed prices exclude delivery.</p>
         </section>
       </div>
     </div>
@@ -246,7 +246,7 @@
         <h2 id="about-title">Good clothes.<br><em>Better second lives.</em></h2>
       </div>
       <div class="about-copy">
-        <p>Sharon Thriftwear is a small Kiambu shop for preloved style. From easy everyday tops to dresses for your next occasion, we handpick pieces worth wearing again and again.</p>
+        <p>Sharon Thriftwear is a small Kiambu shop for preloved style. From everyday tops to dresses for your next occasion, we handpick pieces worth wearing again and again.</p>
         <a class="underlined-link" href="https://www.tiktok.com/@thrifts128" target="_blank" rel="noopener noreferrer">See what’s new on TikTok <svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a>
       </div>
     </section>
@@ -264,11 +264,17 @@
           </div>
         </div>
         <figure class="visit-map">
-          <iframe
-            title="Google Maps Street View near Sharon Thriftwear in Kiambu Town"
-            src="https://www.google.com/maps/embed?pb=!4v1795161600098!6m8!1m7!1slGnZCPFzTtDuEz2jK9xWYw!2m2!1d-1.169109422860065!2d36.82614721916594!3f230.00870791651704!4f6.490871108014204!5f0.5943932859124508"
-            width="600" height="450" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-          <figcaption>Street View near Rumathi Building</figcaption>
+          <figcaption>
+            <span>Street View near Rumathi Building</span>
+            <button class="button button-outline visit-map-toggle" id="visit-map-toggle" type="button" aria-controls="visit-map-frame" hidden>Explore map</button>
+          </figcaption>
+          <div class="visit-map-viewport">
+            <iframe
+              id="visit-map-frame"
+              title="Google Maps Street View near Sharon Thriftwear in Kiambu Town"
+              src="https://www.google.com/maps/embed?pb=!4v1795161600098!6m8!1m7!1slGnZCPFzTtDuEz2jK9xWYw!2m2!1d-1.169109422860065!2d36.82614721916594!3f230.00870791651704!4f6.490871108014204!5f0.5943932859124508"
+              loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
         </figure>
       </div>
     </section>
@@ -288,9 +294,10 @@
         <h2>Shop</h2>
         <a href="?category=new#collection" data-category="new">New arrivals</a>
         <a href="?category=dresses#collection" data-category="dresses">Dresses</a>
-        <a href="?category=crop-tops#collection" data-category="crop-tops">Tops</a>
-        <a href="?category=skirts#collection" data-category="skirts">Skirts</a>
+        <a href="?category=tops#collection" data-category="tops">Tops</a>
+        <a href="?category=trousers#collection" data-category="trousers">Trousers</a>
         <a href="?category=co-ords#collection" data-category="co-ords">Co-ords</a>
+        <a href="?category=playsuits#collection" data-category="playsuits">Playsuits</a>
       </div>
       <div class="footer-column">
         <h2>Help</h2>
@@ -360,9 +367,10 @@
         <a href="./#collection" data-category="all">Shop all <svg class="icon" aria-hidden="true"><use href="#i-right"/></svg></a>
         <a href="?category=new#collection" data-category="new">New arrivals <svg class="icon" aria-hidden="true"><use href="#i-right"/></svg></a>
         <a href="?category=dresses#collection" data-category="dresses">Dresses <svg class="icon" aria-hidden="true"><use href="#i-right"/></svg></a>
-        <a href="?category=crop-tops#collection" data-category="crop-tops">Tops <svg class="icon" aria-hidden="true"><use href="#i-right"/></svg></a>
-        <a href="?category=skirts#collection" data-category="skirts">Skirts <svg class="icon" aria-hidden="true"><use href="#i-right"/></svg></a>
+        <a href="?category=tops#collection" data-category="tops">Tops <svg class="icon" aria-hidden="true"><use href="#i-right"/></svg></a>
+        <a href="?category=trousers#collection" data-category="trousers">Trousers <svg class="icon" aria-hidden="true"><use href="#i-right"/></svg></a>
         <a href="?category=co-ords#collection" data-category="co-ords">Co-ords <svg class="icon" aria-hidden="true"><use href="#i-right"/></svg></a>
+        <a href="?category=playsuits#collection" data-category="playsuits">Playsuits <svg class="icon" aria-hidden="true"><use href="#i-right"/></svg></a>
         <a href="#about" data-close>Our story <svg class="icon" aria-hidden="true"><use href="#i-right"/></svg></a>
         <a href="#visit" data-close>Visit &amp; pickup <svg class="icon" aria-hidden="true"><use href="#i-right"/></svg></a>
         <a href="#contact" data-close>Contact <svg class="icon" aria-hidden="true"><use href="#i-right"/></svg></a>
