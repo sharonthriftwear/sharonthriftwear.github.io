@@ -2,13 +2,16 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { statSync } from 'node:fs';
 import {
-  CATEGORIES, PRODUCTS, PRICE_RANGE, filterProducts, getPage, readCatalogState,
-  cleanBag, cleanWishlist, bagItems, bagTotal, buildOrderMessage, whatsappLink,
+  CATEGORIES, PRODUCTS, PRICE_RANGE, MAX_SIZE_LENGTH, filterProducts, getPage, readCatalogState,
+  cleanRequestedSize, cleanBag, cleanWishlist, bagItems, bagTotal, buildProductEnquiry,
+  buildOrderMessage, whatsappLink,
 } from '../assets/js/catalog.js';
 
 const defaults = readCatalogState();
 const filters = (options) => filterProducts(PRODUCTS, { ...defaults, ...options });
 const ids = (products) => products.map(({ id }) => id);
+const findStyle = (styleId) => PRODUCTS.find(({ id }) => id === styleId);
+const listedSizeOr = (id, fallback) => findStyle(id).sizes?.[0] ?? fallback;
 
 test('each catalog listing uses its local photo and the matching caption price', () => {
   // Keyed by image so swapping photos between differently priced listings is caught.
@@ -53,6 +56,11 @@ test('each catalog listing uses its local photo and the matching caption price',
   for (const product of PRODUCTS) {
     assert.ok(Object.hasOwn(CATEGORIES, product.category));
     assert.ok(product.alt.trim());
+    if (product.sizes !== undefined) {
+      assert.ok(Array.isArray(product.sizes) && product.sizes.length > 0, product.name);
+      assert.ok(product.sizes.every((label) => typeof label === 'string' && label && cleanRequestedSize({}, label) === label), product.name);
+      assert.equal(new Set(product.sizes.map((label) => label.toLowerCase())).size, product.sizes.length, product.name);
+    }
     assert.match(product.image, /^\.\/assets\/images\/(?:[a-f0-9-]+\.jpeg|catalog\/[a-z0-9-]+\.webp)$/);
     assert.equal(product.price, captionPrices[product.image.slice('./assets/images/'.length)], product.name);
     const file = statSync(new URL(`../${product.image}`, import.meta.url));
@@ -112,32 +120,71 @@ test('catalog URLs validate values and pagination clamps missing or unavailable 
   assert.deepEqual(getPage([], -10), { page: 1, pages: 1, total: 0, start: 0, end: 0, items: [] });
 });
 
-test('saved state drops retired listings, invalid quantities and duplicates', () => {
-  assert.deepEqual(cleanBag({ 'black-sash-mini': 2, 'beige-zip-front-set': 99, 'white-sash-mini': 0, 'sky-blue-one-shoulder': '2', 'sunday-floral': 1 }), { 'black-sash-mini': 2, 'beige-zip-front-set': 9 });
+test('saved state preserves legacy quantities and cleans size preferences and stale listings', () => {
+  const size = listedSizeOr('beige-zip-front-set', 'UK 12');
+  assert.deepEqual(cleanBag({
+    'black-sash-mini': 2,
+    'beige-zip-front-set': { quantity: 99, size: ` ${size.replaceAll(' ', '  ')} ` },
+    'white-open-back-crop': { quantity: 1, size: 12 },
+    'white-sash-mini': 0,
+    'sky-blue-one-shoulder': { quantity: '2', size: 'S' },
+    'sunday-floral': { quantity: 1, size: 'M' },
+  }), {
+    'black-sash-mini': { quantity: 2, size: '' },
+    'beige-zip-front-set': { quantity: 9, size },
+    'white-open-back-crop': { quantity: 1, size: '' },
+  });
   assert.deepEqual(cleanBag(null), {});
   assert.deepEqual(cleanWishlist(['black-sash-mini', 2, 'black-sash-mini', 'oat-ribbed', 'beige-zip-front-set']), ['black-sash-mini', 'beige-zip-front-set']);
 });
 
-test('WhatsApp requests include the selected styles, unit prices, quantities and delivery details', () => {
-  const items = bagItems({ 'pink-floral-midi': 1, 'white-open-back-crop': 2 });
+test('sizes accept a short preference when unlisted and match only listed labels when known', () => {
+  assert.equal(cleanRequestedSize({}, '  UK\n 10\t'), 'UK 10');
+  assert.equal(cleanRequestedSize({}, 'x'.repeat(100)).length, MAX_SIZE_LENGTH);
+  assert.equal(cleanRequestedSize({}, '  '), '');
+  assert.equal(cleanRequestedSize({}, ['S']), '');
+  const listed = { sizes: ['S', 'UK 12'] };
+  assert.equal(cleanRequestedSize(listed, ' uk  12 '), 'UK 12');
+  assert.equal(cleanRequestedSize(listed, 'M'), '');
+  assert.equal(cleanRequestedSize(listed, ''), '');
+});
+
+test('a direct product enquiry includes the preferred size only if given', () => {
+  const style = { ...findStyle('beige-zip-front-set'), sizes: ['UK 10'] };
+  const message = buildProductEnquiry(style, '  UK 10  ');
+  assert.match(message, /^Hi Sharon! Is the Beige Zip-Front Set \(KSh 1,400\) available\?/);
+  assert.match(message, /^Preferred size: UK 10$/m);
+  assert.match(message, /confirm the size, measurements and condition/);
+  assert.doesNotMatch(buildProductEnquiry(style), /Preferred size:/);
+  assert.doesNotMatch(buildProductEnquiry(style, 'XL'), /Preferred size:/);
+});
+
+test('WhatsApp requests include the selected styles, preferred size per item, unit prices and delivery', () => {
+  const dressSize = listedSizeOr('pink-floral-midi', 'UK 10');
+  const topSize = listedSizeOr('white-open-back-crop', 'M');
+  const items = bagItems(cleanBag({
+    'pink-floral-midi': { quantity: 1, size: dressSize },
+    'white-open-back-crop': { quantity: 2, size: topSize },
+  }));
   assert.equal(bagTotal(items), 1400);
-  const order = buildOrderMessage(items, { name: ' Ames ', size: 'UK 10', delivery: 'courier', area: 'Nyeri & environs' });
+  const order = buildOrderMessage(items, { name: ' Ames ', delivery: 'courier', area: 'Nyeri & environs' });
   const link = new URL(whatsappLink(order));
   assert.equal(link.origin + link.pathname, 'https://wa.me/254737233022');
   assert.equal(link.searchParams.get('text'), order);
-  assert.match(order, /^• 1 × Pink Floral Midi Dress \(KSh 1,000 each\)$/m);
-  assert.match(order, /^• 2 × White Open-Back Crop Top \(KSh 200 each\)$/m);
+  const lines = order.split('\n');
+  assert.ok(lines.includes(`• 1 × Pink Floral Midi Dress (KSh 1,000 each) — Preferred size: ${dressSize}`));
+  assert.ok(lines.includes(`• 2 × White Open-Back Crop Top (KSh 200 each) — Preferred size: ${topSize}`));
   assert.match(order, /^Subtotal before delivery: KSh 1,400$/m);
   assert.match(order, /Name: Ames/);
-  assert.match(order, /Preferred size: UK 10/);
   assert.match(order, /Courier delivery within Kenya/);
   assert.match(order, /Nyeri & environs/);
   assert.doesNotMatch(order, /Pickup address:/);
 });
 
 test('pickup requests include the shop address instead of a delivery area', () => {
-  const order = buildOrderMessage(bagItems({ 'beige-zip-front-set': 1 }), { delivery: 'pickup', area: 'Do not include' });
+  const order = buildOrderMessage(bagItems(cleanBag({ 'beige-zip-front-set': 1 })), { delivery: 'pickup', area: 'Do not include' });
   assert.match(order, /Delivery method: Pickup in Kiambu Town/);
   assert.match(order, /^Pickup address: Kiambu Town, opposite Rumathi Building$/m);
-  assert.doesNotMatch(order, /delivery area|Do not include/);
+  assert.match(order, /^• 1 × Beige Zip-Front Set \(KSh 1,400 each\)$/m);
+  assert.doesNotMatch(order, /delivery area|Do not include|Preferred size:/);
 });
