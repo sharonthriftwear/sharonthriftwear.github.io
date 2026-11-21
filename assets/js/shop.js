@@ -132,10 +132,10 @@ function renderActiveFilters() {
 }
 
 function image(product, options = '') {
-  return `<img data-style-photo src="${escape(product.image)}" alt="${escape(product.alt)}" width="640" height="800" referrerpolicy="no-referrer" ${options}>`;
+  return `<img data-style-photo src="${escape(product.image)}" alt="${escape(product.alt)}" width="640" height="800" ${options}>`;
 }
 
-// A third-party image failure must not leave a broken card or block shopping.
+// A missing catalog photo must not leave a broken card or block shopping.
 document.addEventListener('error', ({ target }) => {
   if (!(target instanceof HTMLImageElement) || !target.hasAttribute('data-style-photo')) return;
   target.removeAttribute('data-style-photo');
@@ -154,10 +154,6 @@ function saveButton(product, className) {
   return `<button class="${className}" type="button" data-action="save" data-id="${product.id}" aria-label="Save ${escape(product.name)} to wishlist" aria-pressed="${saved}">${icon('heart')}</button>`;
 }
 
-function priceLabel(product) {
-  return `<span class="from">From</span> ${formatMoney(product.price[0])}`;
-}
-
 function productCard(product, index) {
   const badge = product.isNew ? '<span class="product-badge">New in</span>' : product.pick ? '<span class="product-badge is-pick">Editor’s pick</span>' : '';
   const loading = index === 0 ? 'fetchpriority="high"' : index < 4 ? '' : 'loading="lazy" decoding="async"';
@@ -171,7 +167,7 @@ function productCard(product, index) {
       <p class="product-category">${escape(CATEGORIES[product.category].label)}</p>
       <h3 class="product-title"><button type="button" data-action="detail" data-id="${product.id}" aria-haspopup="dialog">${escape(product.name)}</button></h3>
       <p class="product-description">${escape(product.description)}</p>
-      <p class="product-price">${priceLabel(product)}</p>
+      <p class="product-price">${formatMoney(product.price)}</p>
       ${bagButton(product, 'product-action')}
     </div>
   </article>`;
@@ -243,6 +239,29 @@ function placeFilters() {
   if (panel.parentElement !== host) host.append(panel);
 }
 
+function setupVisitMap() {
+  const frame = $('#visit-map-frame');
+  const toggle = $('#visit-map-toggle');
+  if (!frame || !toggle) return;
+
+  const scrollSafeLayout = window.matchMedia('(max-width: 760px), (pointer: coarse)');
+  function setInteractive(interactive) {
+    frame.toggleAttribute('inert', !interactive);
+    if (interactive) frame.removeAttribute('tabindex');
+    else frame.tabIndex = -1;
+    toggle.textContent = interactive ? 'Done exploring' : 'Explore map';
+  }
+
+  function syncLayout() {
+    toggle.hidden = !scrollSafeLayout.matches;
+    setInteractive(!scrollSafeLayout.matches);
+  }
+
+  toggle.addEventListener('click', () => setInteractive(frame.hasAttribute('inert')));
+  scrollSafeLayout.addEventListener('change', syncLayout);
+  syncLayout();
+}
+
 function renderIndicators() {
   const bagCount = Object.values(bag).reduce((sum, quantity) => sum + quantity, 0);
   const savedCount = wishlist.length;
@@ -288,14 +307,14 @@ function showDialog(dialog) {
 
 function openProduct(product) {
   const category = CATEGORIES[product.category].label;
-  const link = whatsappLink(`Hi Sharon! I’m interested in ${product.name}. Could you share the pieces, sizes and prices you have available?`);
+  const link = whatsappLink(`Hi Sharon! Is the ${product.name} (${formatMoney(product.price)}) available? Could you confirm the size and condition?`);
   $('#product-detail').innerHTML = `<div class="detail-media">${image(product)}</div>
     <div class="detail-copy">
       <p class="eyebrow">${escape(category)}</p>
       <h2 id="product-dialog-title">${escape(product.name)}</h2>
-      <p class="detail-price">${formatRange(...product.price)} <span class="sr-only">guide price</span></p>
+      <p class="detail-price">${formatMoney(product.price)}</p>
       <p class="detail-description">${escape(product.description)}</p>
-      <p class="detail-note">This photo shows an example style. Ask Sharon for current pieces, condition and measurements.</p>
+      <p class="detail-note">Ask Sharon to confirm availability, measurements and condition before ordering.</p>
       <div class="detail-actions">${bagButton(product, 'detail-bag')}${saveButton(product, 'icon-control')}</div>
       <a href="${escape(link)}" class="button button-outline detail-whatsapp" target="_blank" rel="noopener noreferrer">${icon('whatsapp')} Check availability</a>
       <p id="detail-status" class="sr-only" role="status"></p>
@@ -327,7 +346,7 @@ function renderWishlist() {
     const product = findProduct(id);
     return `<article class="drawer-line">
       ${drawerImage(product)}
-      <div>${lineTitle(product)}<p class="line-price">${priceLabel(product)}</p><div class="line-actions">${bagButton(product, 'line-bag')}</div></div>
+      <div>${lineTitle(product)}<p class="line-price">${formatMoney(product.price)}</p><div class="line-actions">${bagButton(product, 'line-bag')}</div></div>
       <button class="icon-control line-remove" type="button" data-action="remove-saved" data-id="${id}" aria-label="Remove ${escape(product.name)} from wishlist">${icon('close')}</button>
     </article>`;
   }).join('');
@@ -338,18 +357,18 @@ function bagLine({ product, quantity }) {
   const qtyButton = (step, label, disabled) => `<button type="button" data-action="quantity" data-focus-key="${id}-${step}" data-id="${id}" data-step="${step}" aria-label="${label} quantity for ${escape(product.name)}"${disabled ? ' disabled' : ''}>${icon(step < 0 ? 'minus' : 'plus')}</button>`;
   return `<article class="drawer-line">
     ${drawerImage(product)}
-    <div>${lineTitle(product)}<p class="line-price">From ${formatMoney(product.price[0])} each</p>
+    <div>${lineTitle(product)}<p class="line-price">${formatMoney(product.price)} each</p>
       <div class="line-actions">
         <div class="quantity" role="group" aria-label="Quantity for ${escape(product.name)}">${qtyButton(-1, 'Decrease', quantity <= 1)}<span>${quantity}</span>${qtyButton(1, 'Increase', quantity >= MAX_QUANTITY)}</div>
         <button type="button" class="text-button" data-action="remove-bag" data-id="${id}" aria-label="Remove ${escape(product.name)} from bag">Remove</button>
       </div>
     </div>
-    <p class="line-total">${formatMoney(product.price[0] * quantity)}+</p>
+    <p class="line-total">${formatMoney(product.price * quantity)}</p>
   </article>`;
 }
 
 function subtotalMarkup(items) {
-  return `<p class="drawer-subtotal"><span>Guide subtotal</span><span>From ${formatMoney(bagTotal(items))}</span></p>`;
+  return `<p class="drawer-subtotal"><span>Subtotal</span><span>${formatMoney(bagTotal(items))}</span></p>`;
 }
 
 function renderBag(items) {
@@ -361,7 +380,7 @@ function renderBag(items) {
     return;
   }
   drawerBody.innerHTML = items.map(bagLine).join('');
-  drawerFooter.innerHTML = `${subtotalMarkup(items)}<p class="drawer-hint">Based on starting prices. Exact prices and delivery are confirmed by Sharon.</p><button type="button" class="button button-primary full-width" data-action="checkout">Review order ${icon('arrow')}</button>`;
+  drawerFooter.innerHTML = `${subtotalMarkup(items)}<p class="drawer-hint">Delivery is not included. Sharon will confirm availability and any delivery fee on WhatsApp.</p><button type="button" class="button button-primary full-width" data-action="checkout">Review order ${icon('arrow')}</button>`;
 }
 
 function syncOrderArea() {
@@ -657,6 +676,7 @@ window.addEventListener('storage', (event) => {
 searchInput.value = state.query;
 resultsCount.tabIndex = -1;
 $('#year').textContent = new Date().getFullYear();
+setupVisitMap();
 placeFilters();
 renderCategories();
 syncPriceInputs();
