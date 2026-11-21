@@ -19,7 +19,7 @@ export const CATEGORIES = {
   playsuits: { label: 'Playsuits', aliases: 'rompers one piece' },
 };
 
-// Each price is in KSh, matched to a WhatsApp caption for the pictured style.
+// Prices are in KSh. Add a sizes array only when the shop has confirmed the labels.
 export const PRODUCTS = [
   {
     id: 'pink-floral-midi', name: 'Pink Floral Midi Dress', category: 'midi-dresses', price: 1000, pick: true,
@@ -253,6 +253,7 @@ export const PRICE_RANGE = {
 };
 export const PAGE_SIZE = 8;
 export const MAX_QUANTITY = 9;
+export const MAX_SIZE_LENGTH = 35;
 export const SORTS = ['featured', 'newest', 'price-low', 'price-high', 'name'];
 export const DELIVERY = {
   pickup: 'Pickup in Kiambu Town',
@@ -329,11 +330,21 @@ export function readCatalogState(params = new URLSearchParams()) {
   };
 }
 
+export function cleanRequestedSize(product, value) {
+  if (typeof value !== 'string') return '';
+  const size = value.trim().replace(/\s+/g, ' ').slice(0, MAX_SIZE_LENGTH).trimEnd();
+  if (!product.sizes?.length) return size;
+  return product.sizes.find((label) => label.toLowerCase() === size.toLowerCase()) ?? '';
+}
+
 export function cleanBag(value) {
   if (!value || typeof value !== 'object') return {};
-  return Object.fromEntries(PRODUCTS.flatMap(({ id }) => {
-    const quantity = Number.isInteger(value[id]) ? Math.min(MAX_QUANTITY, value[id]) : 0;
-    return quantity > 0 ? [[id, quantity]] : [];
+  return Object.fromEntries(PRODUCTS.flatMap((product) => {
+    const entry = value[product.id];
+    // The original bag stored quantities as numbers with no size preference.
+    const quantity = typeof entry === 'number' ? entry : entry?.quantity;
+    if (!Number.isInteger(quantity) || quantity <= 0) return [];
+    return [[product.id, { quantity: Math.min(MAX_QUANTITY, quantity), size: cleanRequestedSize(product, entry?.size) }]];
   }));
 }
 
@@ -342,13 +353,25 @@ export function cleanWishlist(value) {
 }
 
 export function bagItems(bag) {
-  return PRODUCTS.flatMap((product) => bag[product.id] ? [{ product, quantity: bag[product.id] }] : []);
+  return PRODUCTS.flatMap((product) => bag[product.id] ? [{ product, ...bag[product.id] }] : []);
 }
 
 export const bagTotal = (items) => items.reduce((total, { product, quantity }) => total + product.price * quantity, 0);
 
-export function buildOrderMessage(items, { name = '', size = '', delivery, area = '' } = {}) {
-  const lines = items.map(({ product, quantity }) => `• ${quantity} × ${product.name} (${formatMoney(product.price)} each)`);
+export function buildProductEnquiry(product, requestedSize = '') {
+  const size = cleanRequestedSize(product, requestedSize);
+  return [
+    `Hi Sharon! Is the ${product.name} (${formatMoney(product.price)}) available?`,
+    ...(size ? [`Preferred size: ${size}`] : []),
+    'Could you confirm the size, measurements and condition?',
+  ].join('\n');
+}
+
+export function buildOrderMessage(items, { name = '', delivery, area = '' } = {}) {
+  const lines = items.map(({ product, quantity, size: requestedSize }) => {
+    const size = cleanRequestedSize(product, requestedSize);
+    return `• ${quantity} × ${product.name} (${formatMoney(product.price)} each)${size ? ` — Preferred size: ${size}` : ''}`;
+  });
   return [
     'Hi Sharon! I’d like to ask about these thrift styles:',
     '',
@@ -356,7 +379,6 @@ export function buildOrderMessage(items, { name = '', size = '', delivery, area 
     '',
     `Subtotal before delivery: ${formatMoney(bagTotal(items))}`,
     ...(name.trim() ? [`Name: ${name.trim()}`] : []),
-    ...(size.trim() ? [`Preferred size: ${size.trim()}`] : []),
     ...(Object.hasOwn(DELIVERY, delivery) ? [`Delivery method: ${DELIVERY[delivery]}`] : []),
     ...(delivery === 'pickup' ? [`Pickup address: ${SHOP.pickupAddress}`] : []),
     ...(delivery !== 'pickup' && area.trim() ? [`Town / delivery area: ${area.trim()}`] : []),

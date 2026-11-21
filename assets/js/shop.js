@@ -1,9 +1,9 @@
 import {
-  SHOP, CATEGORIES, PRODUCTS, PRICE_RANGE, MAX_QUANTITY, DELIVERY,
+  SHOP, CATEGORIES, PRODUCTS, PRICE_RANGE, MAX_QUANTITY, MAX_SIZE_LENGTH, DELIVERY,
   formatMoney, formatRange, whatsappLink, matchesCategory,
-  filterProducts, getPage, readCatalogState, cleanBag, cleanWishlist, bagItems,
-  bagTotal, buildOrderMessage,
-} from './catalog.js';
+  filterProducts, getPage, readCatalogState, cleanRequestedSize, cleanBag, cleanWishlist,
+  bagItems, bagTotal, buildProductEnquiry, buildOrderMessage,
+} from './catalog.js?v=2';
 import { setupPhotoPreview } from './photo-preview.js';
 
 const $ = (selector, root = document) => root.querySelector(selector);
@@ -13,7 +13,7 @@ const icon = (name) => `<svg class="icon" aria-hidden="true"><use href="#i-${nam
 const findProduct = (id) => PRODUCTS.find((product) => product.id === id);
 const itemLabel = (count, singular = 'style', plural = `${singular}s`) => `${count} ${count === 1 ? singular : plural}`;
 
-const storageKeys = { bag: 'sharon-shop-bag-v1', wishlist: 'sharon-shop-wishlist-v1' };
+const storageKeys = { bag: 'sharon-shop-bag-v2', legacyBag: 'sharon-shop-bag-v1', wishlist: 'sharon-shop-wishlist-v1' };
 function readStorage(key) {
   try { return JSON.parse(localStorage.getItem(key)); } catch { return null; }
 }
@@ -21,8 +21,10 @@ function writeStorage(key, value) {
   try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* Keep the current session usable without storage. */ }
 }
 
+const loadBag = () => cleanBag(readStorage(storageKeys.bag) ?? readStorage(storageKeys.legacyBag));
+
 let state = readCatalogState(new URLSearchParams(location.search));
-let bag = cleanBag(readStorage(storageKeys.bag));
+let bag = loadBag();
 let wishlist = cleanWishlist(readStorage(storageKeys.wishlist));
 let drawerMode = 'bag';
 let toastTimer;
@@ -156,9 +158,14 @@ function saveButton(product, className) {
   return `<button class="${className}" type="button" data-action="save" data-id="${product.id}" aria-label="Save ${escape(product.name)} to wishlist" aria-pressed="${saved}">${icon('heart')}</button>`;
 }
 
+function listedSizes({ sizes = [] }) {
+  return sizes.length ? `${sizes.length === 1 ? 'Size' : 'Sizes'}: ${sizes.join(', ')}` : '';
+}
+
 function productCard(product, index) {
   const badge = product.isNew ? '<span class="product-badge">New in</span>' : product.pick ? '<span class="product-badge is-pick">Editor’s pick</span>' : '';
   const loading = index === 0 ? 'fetchpriority="high"' : index < 4 ? '' : 'loading="lazy" decoding="async"';
+  const sizes = listedSizes(product);
   return `<article class="product-card" data-product="${product.id}">
     <div class="product-media">
       <button type="button" class="product-photo" data-action="detail" data-id="${product.id}" aria-label="View ${escape(product.name)} details" aria-haspopup="dialog">${image(product, loading)}</button>
@@ -169,6 +176,7 @@ function productCard(product, index) {
       <p class="product-category">${escape(CATEGORIES[product.category].label)}</p>
       <h3 class="product-title"><button type="button" data-action="detail" data-id="${product.id}" aria-haspopup="dialog">${escape(product.name)}</button></h3>
       <p class="product-description">${escape(product.description)}</p>
+      ${sizes ? `<p class="product-sizes">${escape(sizes)}</p>` : ''}
       <p class="product-price">${formatMoney(product.price)}</p>
       ${bagButton(product, 'product-action')}
     </div>
@@ -265,7 +273,7 @@ function setupVisitMap() {
 }
 
 function renderIndicators() {
-  const bagCount = Object.values(bag).reduce((sum, quantity) => sum + quantity, 0);
+  const bagCount = Object.values(bag).reduce((sum, { quantity }) => sum + quantity, 0);
   const savedCount = wishlist.length;
   $('#bag-count').textContent = bagCount;
   $('#wishlist-count').textContent = savedCount;
@@ -307,9 +315,27 @@ function showDialog(dialog) {
   if (!dialog.open) dialog.showModal();
 }
 
+function sizeField(product, size, { detail = false } = {}) {
+  const id = detail ? 'detail-size' : `bag-size-${product.id}`;
+  const attributes = `id="${id}" data-size-for="${product.id}"${detail ? ' aria-describedby="detail-size-note"' : ''}`;
+  const field = product.sizes?.length
+    ? `<select ${attributes}><option value="">No preference</option>${product.sizes.map((label) => `<option value="${escape(label)}"${label === size ? ' selected' : ''}>${escape(label)}</option>`).join('')}</select>`
+    : `<input ${attributes} type="text" value="${escape(size)}" maxlength="${MAX_SIZE_LENGTH}" placeholder="e.g. UK 10" autocomplete="off" enterkeyhint="done">`;
+  return `<div class="size-field">
+    <label for="${id}">Preferred size <span>(optional)</span>${detail ? '' : ` <span class="sr-only">for ${escape(product.name)}</span>`}</label>
+    ${field}
+  </div>`;
+}
+
+function updateDetailEnquiry(product, size) {
+  $('.detail-whatsapp', productDialog).href = whatsappLink(buildProductEnquiry(product, size));
+}
+
 function openProduct(product) {
   const category = CATEGORIES[product.category].label;
-  const link = whatsappLink(`Hi Sharon! Is the ${product.name} (${formatMoney(product.price)}) available? Could you confirm the size and condition?`);
+  const size = bag[product.id]?.size ?? '';
+  const sizes = listedSizes(product);
+  const link = whatsappLink(buildProductEnquiry(product, size));
   $('#product-detail').innerHTML = `<div class="detail-media">
       ${image(product)}
       <button class="button detail-preview-launch" type="button" data-action="preview" data-id="${product.id}" aria-haspopup="dialog" aria-controls="photo-preview-dialog">
@@ -321,7 +347,10 @@ function openProduct(product) {
       <h2 id="product-dialog-title">${escape(product.name)}</h2>
       <p class="detail-price">${formatMoney(product.price)}</p>
       <p class="detail-description">${escape(product.description)}</p>
-      <p class="detail-note">Ask Sharon to confirm availability, measurements and condition before ordering.</p>
+      <div class="detail-sizing">
+        <p class="detail-size-note" id="detail-size-note">${sizes ? `<strong>${escape(sizes)}</strong>. Confirm availability and fit with Sharon.` : 'Size not listed. Ask Sharon to confirm the size and measurements.'}</p>
+        ${sizeField(product, size, { detail: true })}
+      </div>
       <div class="detail-actions">${bagButton(product, 'detail-bag')}${saveButton(product, 'icon-control')}</div>
       <a href="${escape(link)}" class="button button-outline detail-whatsapp" target="_blank" rel="noopener noreferrer">${icon('whatsapp')} Check availability</a>
       <p id="detail-status" class="sr-only" role="status"></p>
@@ -359,12 +388,13 @@ function renderWishlist() {
   }).join('');
 }
 
-function bagLine({ product, quantity }) {
+function bagLine({ product, quantity, size }) {
   const id = product.id;
   const qtyButton = (step, label, disabled) => `<button type="button" data-action="quantity" data-focus-key="${id}-${step}" data-id="${id}" data-step="${step}" aria-label="${label} quantity for ${escape(product.name)}"${disabled ? ' disabled' : ''}>${icon(step < 0 ? 'minus' : 'plus')}</button>`;
   return `<article class="drawer-line">
     ${drawerImage(product)}
     <div>${lineTitle(product)}<p class="line-price">${formatMoney(product.price)} each</p>
+      ${sizeField(product, size)}
       <div class="line-actions">
         <div class="quantity" role="group" aria-label="Quantity for ${escape(product.name)}">${qtyButton(-1, 'Decrease', quantity <= 1)}<span>${quantity}</span>${qtyButton(1, 'Increase', quantity >= MAX_QUANTITY)}</div>
         <button type="button" class="text-button" data-action="remove-bag" data-id="${id}" aria-label="Remove ${escape(product.name)} from bag">Remove</button>
@@ -387,7 +417,7 @@ function renderBag(items) {
     return;
   }
   drawerBody.innerHTML = items.map(bagLine).join('');
-  drawerFooter.innerHTML = `${subtotalMarkup(items)}<p class="drawer-hint">Delivery is not included. Sharon will confirm availability and any delivery fee on WhatsApp.</p><button type="button" class="button button-primary full-width" data-action="checkout">Review order ${icon('arrow')}</button>`;
+  drawerFooter.innerHTML = `${subtotalMarkup(items)}<p class="drawer-hint">Sharon will confirm sizes, availability and any delivery fee on WhatsApp. Delivery is not included.</p><button type="button" class="button button-primary full-width" data-action="checkout">Review order ${icon('arrow')}</button>`;
 }
 
 function syncOrderArea() {
@@ -403,7 +433,7 @@ function syncOrderArea() {
 
 function checkoutSummary(items) {
   const count = items.reduce((sum, { quantity }) => sum + quantity, 0);
-  return `<summary>Order summary <span>(${itemLabel(count, 'item')})</span></summary><ul>${items.map(({ product, quantity }) => `<li>${quantity} × ${escape(product.name)}</li>`).join('')}</ul>`;
+  return `<summary>Order summary <span>(${itemLabel(count, 'item')})</span></summary><ul>${items.map(({ product, quantity, size }) => `<li>${quantity} × ${escape(product.name)}${size ? ` — Preferred size: ${escape(size)}` : ''}</li>`).join('')}</ul>`;
 }
 
 function renderCheckout(items) {
@@ -415,7 +445,6 @@ function renderCheckout(items) {
     <form class="checkout-form" id="checkout-form" action="${SHOP.whatsApp}" method="get" target="_blank" rel="noopener noreferrer">
       <input type="hidden" name="text">
       <label class="checkout-field" for="order-name">Your name<input id="order-name" autocomplete="name" required maxlength="70" placeholder="Full name"></label>
-      <label class="checkout-field" for="order-size"><span>Preferred size <span>(optional)</span></span><input id="order-size" maxlength="35" placeholder="e.g. UK 10"></label>
       <label class="checkout-field" for="order-delivery">Delivery or pickup<select id="order-delivery" required><option value="" selected disabled>Choose an option</option>${Object.entries(DELIVERY).map(([key, label]) => `<option value="${key}">${escape(label)}</option>`).join('')}</select></label>
       <p class="drawer-hint" id="order-pickup-note" hidden>Pickup address: ${escape(SHOP.pickupAddress)}.</p>
       <label class="checkout-field" id="order-area-field" for="order-area" hidden>Town / delivery area<input id="order-area" maxlength="80" placeholder="e.g. Nairobi, Westlands"></label>
@@ -447,8 +476,11 @@ function openDrawer(mode) {
   $('#toast').hidden = true;
 }
 
-function updateBag(product, quantity, { focusKey, message, toastBag = false } = {}) {
-  if (quantity > 0) bag[product.id] = Math.min(quantity, MAX_QUANTITY);
+function updateBag(product, quantity, { size = bag[product.id]?.size, focusKey, message, toastBag = false } = {}) {
+  if (quantity > 0) bag[product.id] = {
+    quantity: Math.min(quantity, MAX_QUANTITY),
+    size: cleanRequestedSize(product, size),
+  };
   else delete bag[product.id];
   writeStorage(storageKeys.bag, bag);
   if (drawer.open && drawerMode === 'bag') renderDrawer(focusKey);
@@ -599,14 +631,17 @@ document.addEventListener('click', (event) => {
       if (bag[product.id]) {
         if (productDialog.open) productDialog.close();
         openDrawer('bag');
-      } else updateBag(product, 1, { message: `${product.name} added to your bag.`, toastBag: true });
+      } else updateBag(product, 1, {
+        size: productDialog.contains(control) ? $('#detail-size', productDialog).value : '',
+        message: `${product.name} added to your bag.`, toastBag: true,
+      });
       break;
     case 'remove-bag':
       if (product) updateBag(product, 0, { focusKey: 'drawer-title', message: `${product.name} removed from your bag.` });
       break;
     case 'quantity':
       if (product) {
-        const quantity = Math.max(1, Math.min(MAX_QUANTITY, (bag[product.id] ?? 1) + Number(dataset.step)));
+        const quantity = Math.max(1, Math.min(MAX_QUANTITY, (bag[product.id]?.quantity ?? 1) + Number(dataset.step)));
         updateBag(product, quantity, { focusKey: dataset.focusKey, message: `${product.name}, quantity ${quantity}.` });
       }
       break;
@@ -641,6 +676,22 @@ document.addEventListener('click', (event) => {
   }
 });
 
+document.addEventListener('input', ({ target: field }) => {
+  if (!field.dataset?.sizeFor) return;
+  const product = findProduct(field.dataset.sizeFor);
+  if (!product) return;
+  const size = cleanRequestedSize(product, field.value);
+  const inDetails = field.id === 'detail-size';
+  if (inDetails) updateDetailEnquiry(product, size);
+  const entry = bag[product.id];
+  if (!entry || entry.size === size) return;
+  entry.size = size;
+  writeStorage(storageKeys.bag, bag);
+  // Product details can be open above the bag; keep its underlying field current.
+  const bagField = inDetails && $(`#bag-size-${product.id}`, drawerBody);
+  if (bagField) bagField.value = size;
+});
+
 // Only the encoded message is submitted to WhatsApp; customer details are not stored on the site.
 drawer.addEventListener('change', (event) => { if (event.target.id === 'order-delivery') syncOrderArea(); });
 drawer.addEventListener('input', (event) => {
@@ -661,13 +712,23 @@ drawer.addEventListener('submit', (event) => {
     return;
   }
   $('input[name="text"]', event.target).value = buildOrderMessage(bagItems(bag), {
-    name: name.value, size: $('#order-size').value, delivery: $('#order-delivery').value, area: area.value,
+    name: name.value, delivery: $('#order-delivery').value, area: area.value,
   });
 });
 
 window.addEventListener('storage', (event) => {
-  if (event.key !== storageKeys.bag && event.key !== storageKeys.wishlist && event.key !== null) return;
-  bag = cleanBag(readStorage(storageKeys.bag));
+  if (event.key !== null && !Object.values(storageKeys).includes(event.key)) return;
+  const nextBag = loadBag();
+  const field = productDialog.open && $('#detail-size', productDialog);
+  if (field && field !== document.activeElement) {
+    const id = field.dataset.sizeFor;
+    const size = nextBag[id]?.size;
+    if (size !== undefined && size !== bag[id]?.size) {
+      field.value = size;
+      updateDetailEnquiry(findProduct(id), size);
+    }
+  }
+  bag = nextBag;
   wishlist = cleanWishlist(readStorage(storageKeys.wishlist));
   if (drawer.open && drawerMode !== 'checkout') renderDrawer();
   if (drawer.open && drawerMode === 'checkout') {
